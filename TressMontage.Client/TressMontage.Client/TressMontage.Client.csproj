@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Extensions\UnityExtensions.cs" />
     <Compile Include="Features\Base\ViewBase.cs" />
     <Compile Include="Features\DataMagazine\DataMagazineView.xaml.cs">
       <DependentUpon>DataMagazineView.xaml</DependentUpon>

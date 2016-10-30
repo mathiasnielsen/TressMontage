@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using TressMontage.Client.Features.Base;
 using Xamarin.Forms;
+using Microsoft.Practices.Unity;
+using TressMontage.Client.Core.Features.Base;
+using TressMontage.Client.Core.Features.Map;
 
 namespace TressMontage.Client.Features.Map
 {
-    public partial class MapView : ContentPage
+    public partial class MapView : ViewBase
     {
         public MapView()
         {
@@ -40,6 +43,11 @@ namespace TressMontage.Client.Features.Map
                     webView
                 }
             };
+        }
+
+        protected override BindableViewModelBase OnPrepareViewModel()
+        {
+            return App.Container.Resolve<MapsViewModel>();
         }
     }
 }

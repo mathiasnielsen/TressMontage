@@ -37,11 +37,16 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\RelayCommand.cs" />
+    <Compile Include="Common\RelayCommandGeneric.cs" />
     <Compile Include="Features\Base\BindableViewModelBase.cs" />
     <Compile Include="Features\Base\ViewModelBase.cs" />
     <Compile Include="Features\DataMagazine\DataMagazineViewModel.cs" />
     <Compile Include="Features\Home\HomeViewModel.cs" />
     <Compile Include="Features\Map\MapsViewModel.cs" />
+    <Compile Include="IOC\IInitializable.cs" />
+    <Compile Include="IOC\InitializableStrategy.cs" />
+    <Compile Include="IOC\InitializationExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\INavigationService.cs" />
   </ItemGroup>

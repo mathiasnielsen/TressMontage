@@ -1,6 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<base:ViewBase xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:base="clr-namespace:TressMontage.Client.Features.Base;assembly=TressMontage.Client"
              x:Class="TressMontage.Client.Features.Home.HomeView">
-    <Label Text="{Binding MainText}" VerticalOptions="Center" HorizontalOptions="Center" />
-</ContentPage>
+    <StackLayout
+    Orientation="Vertical"
+    Spacing="10">
+        <Label
+            Text="Tress Montage"/>
+        <Button
+            Text="Map"
+            Command="{Binding NavigateToMapCommand}"/>
+    </StackLayout>
+</base:ViewBase>
