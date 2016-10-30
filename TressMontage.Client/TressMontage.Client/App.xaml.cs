@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Practices.Unity;
 using TressMontage.Client.Core.Services;
 using TressMontage.Client.Extensions;
+using TressMontage.Client.Features.Common;
 using TressMontage.Client.Features.Home;
 using TressMontage.Client.Services;
 using TressMontage.Core.IOC;
@@ -12,7 +14,7 @@ using Xamarin.Forms;
 
 namespace TressMontage.Client
 {
-    public class App : Application
+    public partial class App : Application
     {
         private static IUnityContainer _container;
 
@@ -32,8 +34,10 @@ namespace TressMontage.Client
 
         public App()
         {
+            InitializeComponent();
+
             var content = new HomeView();
-            MainPage = new NavigationPage(content);
+            MainPage = new MasterNavigationPage(content);
         }
 
         protected override void OnStart()
@@ -62,6 +66,8 @@ namespace TressMontage.Client
 
             // Singleton objects
             _container.RegisterSingleton<INavigationService, NavigationService>();
+            _container.RegisterSingleton<IStorageService, StorageService>();
+            _container.RegisterSingleton<IFileInfoManager, FileInfoManager>();
         }
     }
 }

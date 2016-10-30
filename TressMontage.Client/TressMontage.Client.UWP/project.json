@@ -1,6 +1,7 @@
 ﻿{
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
+    "PCLStorage": "1.0.2",
     "Unity": "4.0.1",
     "Xamarin.Forms": "2.3.2.127"
   },

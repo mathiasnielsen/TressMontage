@@ -20,6 +20,8 @@ namespace TressMontage.Client.Features.Base
         {
             ViewModel = OnPrepareViewModel();
             BindingContext = ViewModel;
+
+            BackgroundColor = (Color)App.Current.Resources["ContentBackgroundColor"];
         }
 
         protected override async void OnAppearing()

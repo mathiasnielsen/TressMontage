@@ -1,6 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<base:ViewBase xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:TressMontage.Client.Features.Base;assembly=TressMontage.Client"
              x:Class="TressMontage.Client.Features.DataMagazine.DataMagazineView">
-    <Label Text="{Binding MainText}" VerticalOptions="Center" HorizontalOptions="Center" />
-</ContentPage>
+    <Grid
+        Style="{StaticResource FormsGrid}">
+        <StackLayout
+            Orientation="Vertical"
+            Spacing="{StaticResource NextControlSpacing}">
+            <Label 
+                Text="Data Magazines" 
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
+            <ListView
+                x:Name="Folders"
+                ItemsSource="{Binding Folders}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid
+                                Padding="0, 0, 0, 20"
+                                BackgroundColor="{StaticResource SecondaryBrandColor}">
+                                <Label 
+                                    Text="{Binding Name, Mode=TwoWay}"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Fill" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </Grid>
+</base:ViewBase>

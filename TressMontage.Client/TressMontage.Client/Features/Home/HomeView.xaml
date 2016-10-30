@@ -3,13 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                xmlns:base="clr-namespace:TressMontage.Client.Features.Base;assembly=TressMontage.Client"
              x:Class="TressMontage.Client.Features.Home.HomeView">
-    <StackLayout
-    Orientation="Vertical"
-    Spacing="10">
-        <Label
-            Text="Tress Montage"/>
-        <Button
-            Text="Map"
-            Command="{Binding NavigateToMapCommand}"/>
-    </StackLayout>
+    <Grid
+        Style="{StaticResource FormsGrid}">
+        <StackLayout
+            Orientation="Vertical"
+            Spacing="10">
+            <Label
+                Style="{StaticResource TitleStyle}"
+                Text="Tress Montage"/>
+            <Button
+                Text="Map"
+                Command="{Binding NavigateToMapCommand}"/>
+            <Button
+                Text="Data Magazines"
+                Command="{Binding NavigateToDataMagazineCommand}"/>
+        </StackLayout>
+    </Grid>
 </base:ViewBase>

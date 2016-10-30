@@ -18,9 +18,17 @@ namespace TressMontage.Client.Core.Features.Home
             this.navigationService = navigationService;
 
             NavigateToMapCommand = new RelayCommand(NavigateToMap);
+            NavigateToDataMagazineCommand = new RelayCommand(NavigateToDataMagazine);
         }
 
+        public RelayCommand NavigateToDataMagazineCommand { get; }
+
         public RelayCommand NavigateToMapCommand { get; }
+
+        private void NavigateToDataMagazine()
+        {
+            navigationService.NavigateToDataMagazine();
+        }
 
         private void NavigateToMap()
         {
