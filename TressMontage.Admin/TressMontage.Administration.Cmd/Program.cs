@@ -23,6 +23,7 @@ namespace TressMontage.Administration.Cmd
 
         private async static void StartAsync()
         {
+            Console.WriteLine("### Before synching:");
             await ListBlobsInContainerAsync();
 
             var currentDirectory = Directory.GetCurrentDirectory();
@@ -31,6 +32,59 @@ namespace TressMontage.Administration.Cmd
             var projectFolder = Path.GetDirectoryName(debugFolder);
             currentDirectory = projectFolder + "\\TestData";
 #endif
+            await SynchDirectoryDataAsync(currentDirectory);
+
+            Console.WriteLine("### After synching:");
+            await ListBlobsInContainerAsync();
+
+#if DEBUG
+            Console.WriteLine("\nPress enter to close...");
+#endif
+        }
+
+        private static async Task SynchDirectoryDataAsync(string currentDirectory)
+        {
+            var allFiles = Directory.GetFiles(currentDirectory, "*txt", SearchOption.AllDirectories);
+            foreach (var file in allFiles)
+            {
+                var uploadResult = await UploadFileAsync(file, currentDirectory);
+            }
+        }
+
+        private static async Task<bool> UploadFileAsync(string filePath, string rootPath)
+        {
+            await UploadBlobIntoContainer(filePath, rootPath);
+            return true;
+        }
+
+        private static async Task UploadBlobIntoContainer(string filePath, string rootPath)
+        {
+            // Retrieve storage account from connection string.
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
+                CloudConfigurationManager.GetSetting(StorageConnectionString));
+
+            // Create the blob client.
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+            // Retrieve reference to a previously created container.
+            CloudBlobContainer container = blobClient.GetContainerReference(ContainerName);
+
+            var fileInfo = new FileInfo(filePath);
+            var filePathWithRelativeDirectory = fileInfo.FullName.Remove(0, rootPath.Length + 1);
+
+            // Retrieve reference to a blob named "myblob".
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(filePathWithRelativeDirectory);
+            ////CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileInfo.Name);
+
+            // Create or overwrite the "myblob" blob with contents from a local file.
+            using (var fileStream = File.OpenRead(filePath))
+            {
+                await blockBlob.UploadFromStreamAsync(fileStream);
+            }
+        }
+
+        private void PrintCurrentDirectoryStruture(string currentDirectory)
+        {
             var subDirectories = Directory.GetDirectories(currentDirectory);
             foreach (var directory in subDirectories)
             {
@@ -44,10 +98,6 @@ namespace TressMontage.Administration.Cmd
                 var fileInfo = new FileInfo(file);
                 Console.WriteLine(fileInfo.Name);
             }
-
-#if DEBUG
-            Console.WriteLine("\nPress enter to close...");
-#endif
         }
 
         private static async Task ListBlobsInContainerAsync()
@@ -64,10 +114,10 @@ namespace TressMontage.Administration.Cmd
 
             await container.CreateIfNotExistsAsync();
 
-            await ListBlobsSegmentedInFlatListing(container);
+            var results = await ListBlobsSegmentedInFlatListing(container);
         }
 
-        public static async Task ListBlobsSegmentedInFlatListing(CloudBlobContainer container)
+        public static async Task<IEnumerable<IListBlobItem>> ListBlobsSegmentedInFlatListing(CloudBlobContainer container)
         {
             //List blobs to the console window, with paging.
             Console.WriteLine("List blobs in pages:");
@@ -95,6 +145,8 @@ namespace TressMontage.Administration.Cmd
                 continuationToken = resultSegment.ContinuationToken;
             }
             while (continuationToken != null);
+
+            return resultSegment.Results;
         }
     }
 }
