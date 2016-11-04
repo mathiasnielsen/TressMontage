@@ -28,13 +28,20 @@ namespace TressMontage.Client.Core.Http.Clients
             var files = new List<byte[]>();
             foreach (var fileName in fileNames)
             {
-                var fileNameAsBytes = Encoding.UTF8.GetBytes(fileName);
-                var encodedFileName = Convert.ToBase64String(fileNameAsBytes);
-                var result = await executor.Get<byte[]>(baseUrl + $"datamagazines/{encodedFileName}");
-                files.Add(result);
+                var fileAsByteArray = await GetFileAsync(fileName);
+                files.Add(fileAsByteArray);
             }
 
             return files;
+        }
+
+        public async Task<byte[]> GetFileAsync(string fileName)
+        {
+            var fileNameAsBytes = Encoding.UTF8.GetBytes(fileName);
+            var encodedFileName = Convert.ToBase64String(fileNameAsBytes);
+            var result = await executor.Get<byte[]>(baseUrl + $"datamagazines/{encodedFileName}");
+
+            return result;
         }
     }
 }
