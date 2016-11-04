@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TressMontage.Server.Api.Controllers;
@@ -30,7 +31,10 @@ namespace TressMontage.Server.Api.Tests
             var  files = new List<byte[]>();
             foreach (var blobName in blobNames)
             {
-                var file = await controller.GetDataMagazineAsync(blobName);
+                var fileNameAsBytes = Encoding.UTF8.GetBytes(blobName);
+                var encodedFileName = Convert.ToBase64String(fileNameAsBytes);
+
+                var file = await controller.GetDataMagazineAsync(encodedFileName);
                 files.Add(file);
             }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -17,7 +18,7 @@ namespace TressMontage.Server.Api.Controllers
         private const string ConnectionString = "DefaultEndpointsProtocol=https;AccountName=tressmontagestorage;AccountKey=NfP2JeN3yg3zorKs+m0LHr0qrzO1QgT6gU9i+JmErY4P2PZi/v2PasqqIr/pVwd/jRAe99i13rYLFj6V8Hko7Q==";
         private const string ContainerName = "data-magazines";
 
-        [Route("datamagazines/urls")]
+        [Route("datamagazines/fileNames")]
         [HttpGet]
         public async Task<List<string>> GetDataMagazinesNamesAsync()
         {
@@ -31,10 +32,13 @@ namespace TressMontage.Server.Api.Controllers
             return blobNamesAsList;
         }
 
-        [Route("datamagazines/{url}")]
+        [Route("datamagazines/{blobName}")]
         [HttpGet]
         public async Task<byte[]> GetDataMagazineAsync(string blobName)
         {
+            var blobNameAsBytes = Convert.FromBase64String(blobName);
+            var decodedFileName = Encoding.UTF8.GetString(blobNameAsBytes);
+
             // Retrieve storage account from connection string.
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConnectionString);
 
@@ -44,7 +48,7 @@ namespace TressMontage.Server.Api.Controllers
             // Retrieve reference to a previously created container.
             CloudBlobContainer container = blobClient.GetContainerReference(ContainerName);
 
-            CloudBlob blob = container.GetBlobReference(blobName);
+            CloudBlob blob = container.GetBlobReference(decodedFileName);
 
             ////// Save blob contents to a file.
             using (var fileStream = new MemoryStream())
