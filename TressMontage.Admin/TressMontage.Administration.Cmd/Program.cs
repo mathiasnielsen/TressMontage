@@ -44,11 +44,16 @@ namespace TressMontage.Administration.Cmd
 
         private static async Task SynchDirectoryDataAsync(string currentDirectory)
         {
-            var allFiles = Directory.GetFiles(currentDirectory, "*txt", SearchOption.AllDirectories);
+            var allFiles = GetFiles(currentDirectory, "*.txt|*.pdf", SearchOption.AllDirectories);
             foreach (var file in allFiles)
             {
                 var uploadResult = await UploadFileAsync(file, currentDirectory);
             }
+        }
+
+        private static string[] GetFiles (string currenDirectory, string filters, SearchOption searchOption)
+        {
+            return filters.Split('|').SelectMany(filter => Directory.GetFiles(currenDirectory, filter, searchOption)).ToArray();
         }
 
         private static async Task<bool> UploadFileAsync(string filePath, string rootPath)
