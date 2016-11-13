@@ -9,6 +9,10 @@ namespace TressMontage.Client.Core.Services
 {
     public interface IFileInfoManager
     {
-        Task<List<Folder>> GetCurrentFolderPathsAsync(string currentFolderPath = "");
+        Task<List<Folder>> GetFoldersAsync(string relativeFolderPath);
+
+        Task<List<FileInfo>> GetFilesDirectoriesInFolderAsync(string relativeFolderPath);
+
+        Task SaveFileAsync(byte[] file, string filePath);
     }
 }

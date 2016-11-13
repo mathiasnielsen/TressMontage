@@ -38,6 +38,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\UnityExtensions.cs" />
     <Compile Include="Features\Base\ViewBase.cs" />
     <Compile Include="Features\Common\MasterNavigationPage.xaml.cs">

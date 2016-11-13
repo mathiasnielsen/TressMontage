@@ -56,12 +56,6 @@ namespace TressMontage.Server.Api.Controllers
                 await blob.DownloadToStreamAsync(fileStream);
                 return fileStream.ToArray();
             }
-
-            // Save blob contents to a file.
-            ////byte[] fileAsBytes = new byte[blob.Properties.Length];
-            ////await blob.DownloadToByteArrayAsync(fileAsBytes, 0);
-
-            ////return fileAsBytes;
         }
 
         private IEnumerable<CloudBlockBlob> GetBlobsInContainer()

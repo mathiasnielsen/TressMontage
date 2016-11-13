@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Practices.Unity;
 using TressMontage.Client.Core.Http;
+using TressMontage.Client.Core.Http.Clients;
 using TressMontage.Client.Core.Services;
 using TressMontage.Client.Extensions;
 using TressMontage.Client.Features.Common;
@@ -70,6 +71,7 @@ namespace TressMontage.Client
             _container.RegisterSingleton<IStorageService, StorageService>();
             _container.RegisterSingleton<IFileInfoManager, FileInfoManager>();
             _container.RegisterSingleton<IHttpClientFactory, HttpClientFactory>();
+            _container.RegisterSingleton<ITressMontageApi, TressMontageApi>();
         }
     }
 }

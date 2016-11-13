@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Services\FileSystem.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -154,6 +155,10 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\TressMontage.Client.Core\TressMontage.Client.Core\TressMontage.Client.Core.csproj">
+      <Project>{71CEBBE1-ACF6-40BC-9F80-CB1AA0148CE8}</Project>
+      <Name>TressMontage.Client.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TressMontage.Client\TressMontage.Client.csproj">
       <Project>{2c0df815-d7e2-4219-97c9-188dbbd9bad3}</Project>
       <Name>TressMontage.Client</Name>

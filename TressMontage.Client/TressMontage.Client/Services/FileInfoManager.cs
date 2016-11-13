@@ -6,31 +6,40 @@ using System.Threading.Tasks;
 using PCLStorage;
 using TressMontage.Client.Core.Services;
 using TressMontage.Entities;
+using TressMontage.Client.Extensions;
 
 namespace TressMontage.Client.Services
 {
     public class FileInfoManager : IFileInfoManager
     {
-        public async Task<List<Folder>> GetCurrentFolderPathsAsync(string currentFolderPath = "")
+        private string LocalStorageUrl;
+
+        public FileInfoManager()
         {
-            var subFolders = await GetFolderStructureAsync(currentFolderPath);
+            LocalStorageUrl = FileSystem.Current.LocalStorage.Path;
+        }
+
+        public async Task<List<Folder>> GetFoldersAsync(string relativeFolderPath)
+        {
+            var subFolders = await GetFolderDirectoriesAsync(relativeFolderPath);
             var folders = subFolders.Select(x => new Folder() { Name = x.Name, Path = x.Path });
 
             return folders.ToList();
         }
 
-        private async Task<IList<IFolder>> GetFolderStructureAsync(string currentFolderPath)
+        public async Task<List<FileInfo>> GetFilesDirectoriesInFolderAsync(string relativeFolderPath)
         {
-            IFolder rootFolder = null;
-            if (currentFolderPath == string.Empty)
-            {
-                rootFolder = FileSystem.Current.LocalStorage;
-            }
-            else
-            {
-                rootFolder = await FileSystem.Current.GetFolderFromPathAsync(currentFolderPath);
-            }
+            var path = LocalStorageUrl + "\\" + relativeFolderPath;
 
+            var folder = await FileSystem.Current.GetFolderFromPathAsync(path);
+            var files = await folder.GetFilesAsync();
+
+            return files.Select(file => new FileInfo() { Name = file.Name, Path = file.Path, Type = file.Name.GetFileType() }).ToList();
+        }
+
+        private async Task<IList<IFolder>> GetFolderDirectoriesAsync(string folderPath)
+        {
+            var rootFolder = await FileSystem.Current.LocalStorage.GetFolderAsync(folderPath);
             var subFolders = await rootFolder?.GetFoldersAsync();
             return subFolders;
         }
@@ -39,6 +48,25 @@ namespace TressMontage.Client.Services
         {
             var files = await folder.GetFilesAsync();
             return files;
+        }
+
+        public async Task SaveFileAsync(byte[] file, string filePath)
+        {
+            var folder = await FileSystem.Current.LocalStorage.CreateFolderAsync(filePath, CreationCollisionOption.OpenIfExists);
+
+            var fileName = GetPathSplitted(filePath).LastOrDefault();
+            var createdFile = await folder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+
+            using (var fileStream = await createdFile.OpenAsync(FileAccess.ReadAndWrite))
+            {
+                await fileStream.WriteAsync(file, 0, file.Length);
+            }
+        }
+
+        private List<string> GetPathSplitted(string filePath)
+        {
+            var levels = filePath.Split('/');
+            return levels?.ToList();
         }
     }
 }

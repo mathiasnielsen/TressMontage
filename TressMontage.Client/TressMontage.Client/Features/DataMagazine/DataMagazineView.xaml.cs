@@ -8,6 +8,7 @@ using TressMontage.Client.Core.Features.DataMagazine;
 using TressMontage.Client.Features.Base;
 using Xamarin.Forms;
 using Microsoft.Practices.Unity;
+using System.IO;
 
 namespace TressMontage.Client.Features.DataMagazine
 {
