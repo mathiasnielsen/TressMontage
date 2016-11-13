@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace TressMontage.Entities
 {
-    public class Folder
+    public class Folder : FileInfo
     {
-        public string Name { get; set; }
-
-        public string Path { get; set; }
+        public int SubFoldersCount { get; set; }
     }
 }

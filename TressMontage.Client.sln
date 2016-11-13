@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TressMontage.Client.Windows
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{BA6626E8-EF1A-4D7C-AD1D-76E9D094A1AE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client.Core", "Client.Core", "{59137B7F-89EF-49F5-8A4C-504CE6073A18}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.1 Client.Core", "1.1 Client.Core", "{59137B7F-89EF-49F5-8A4C-504CE6073A18}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TressMontage.Client.Core", "TressMontage.Client.Core\TressMontage.Client.Core\TressMontage.Client.Core.csproj", "{71CEBBE1-ACF6-40BC-9F80-CB1AA0148CE8}"
 EndProject
@@ -33,7 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{4F2F5E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TressMontage.Server.Api", "TressMontage.Server\TressMontage.Server.Api\TressMontage.Server.Api.csproj", "{8ADA8D28-A9A5-41BE-904D-5BD4D8D991FA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{1EDC085A-83DB-403F-9AE8-DA7403244ABB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.0 Clients", "1.0 Clients", "{1EDC085A-83DB-403F-9AE8-DA7403244ABB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TressMontage.Server.Api.Tests", "TressMontage.Server\TressMontage.Server.Api.Tests\TressMontage.Server.Api.Tests.csproj", "{313C0DEF-FA3C-4743-83DA-85298B20A6E3}"
 EndProject

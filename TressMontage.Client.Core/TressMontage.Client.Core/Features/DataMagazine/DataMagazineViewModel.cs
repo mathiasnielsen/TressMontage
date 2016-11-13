@@ -17,7 +17,7 @@ namespace TressMontage.Client.Core.Features.DataMagazine
         private readonly INavigationService navigationService;
         private readonly ITressMontageApi api;
 
-        private List<Folder> folders;
+        private List<FileInfo> fileInfos;
 
         public DataMagazineViewModel(ITressMontageApi api, INavigationService navigationService, IFileInfoManager fileInfoManager)
         {
@@ -25,24 +25,27 @@ namespace TressMontage.Client.Core.Features.DataMagazine
             this.fileInfoManager = fileInfoManager;
             this.api = api;
 
-            GoToFolderCommand = new RelayCommand<Folder>(GoToFolder);
+            FileInfoSelectedCommand = new RelayCommand<FileInfo>(HandleSelectedFileInfo);
             UpdateCommand = new RelayCommand(Update);
         }
 
-        public RelayCommand<Folder> GoToFolderCommand { get; }
+        public RelayCommand<FileInfo> FileInfoSelectedCommand { get; }
 
         public RelayCommand UpdateCommand { get; }
 
-        public List<Folder> Folders
+        public List<FileInfo> FileInfos
         {
-            get { return folders; }
-            set { Set(ref folders, value); }
+            get { return fileInfos; }
+            set { Set(ref fileInfos, value); }
         }
 
         public override async Task OnViewInitialized()
         {
-            var rootFolders = await fileInfoManager.GetFoldersAsync(RootFolderName);
-            var rootFiles = await fileInfoManager.GetFilesDirectoriesInFolderAsync(RootFolderName);
+            var rootFolders = await fileInfoManager.GetFoldersAsync(RootFolderName) as IEnumerable<FileInfo>;
+            var rootFiles = await fileInfoManager.GetFilesDirectoriesInFolderAsync(RootFolderName) as IEnumerable<FileInfo>;
+
+            var fileInfos = rootFolders.Concat(rootFiles);
+            FileInfos = fileInfos.ToList();
 
             await base.OnViewInitialized();
         }
@@ -52,9 +55,8 @@ namespace TressMontage.Client.Core.Features.DataMagazine
             await fileInfoManager.SaveFileAsync(file, path);
         }
 
-        private void GoToFolder(Folder obj)
+        private void HandleSelectedFileInfo(FileInfo fileInfo)
         {
-            navigationService.NavigateToHome();
         }
 
         private async void Update()
