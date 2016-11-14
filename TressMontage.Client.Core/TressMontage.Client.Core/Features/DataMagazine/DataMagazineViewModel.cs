@@ -52,7 +52,7 @@ namespace TressMontage.Client.Core.Features.DataMagazine
 
         private async Task SaveFileSync(byte[] file, string path)
         {
-            await fileInfoManager.SaveFileAsync(file, path);
+            await fileInfoManager.SaveFileAsync(file, RootFolderName, path);
         }
 
         private void HandleSelectedFileInfo(FileInfo fileInfo)
@@ -67,10 +67,11 @@ namespace TressMontage.Client.Core.Features.DataMagazine
         private async Task RetrieveDataMagazinesFromApiAsync()
         {
             var fileDirectories = await api.GetFileNamesAsync();
-            var fileDirectory = fileDirectories.FirstOrDefault();
-            var file = await api.GetFileAsync(fileDirectory);
-
-            await SaveFileSync(file, fileDirectory);
+            foreach (var fileDirectory in fileDirectories)
+            {
+                var file = await api.GetFileAsync(fileDirectory);
+                await SaveFileSync(file, fileDirectory);
+            }
         }
     }
 }

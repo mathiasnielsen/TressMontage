@@ -21,12 +21,19 @@
                     <DataTemplate>
                         <ViewCell>
                             <Grid
-                                Padding="0, 0, 0, 20"
+                                Padding="20, 10, 10, 20"
                                 BackgroundColor="{StaticResource SecondaryBrandColor}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="100" />
+                                </Grid.ColumnDefinitions>
                                 <Label 
                                     Text="{Binding Name, Mode=TwoWay}"
                                     VerticalOptions="Center"
                                     HorizontalOptions="Fill" />
+                                <Label
+                                    Grid.Column="1"
+                                    Text="{Binding Type}"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

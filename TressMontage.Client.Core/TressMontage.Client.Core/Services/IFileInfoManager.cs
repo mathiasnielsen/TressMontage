@@ -13,6 +13,6 @@ namespace TressMontage.Client.Core.Services
 
         Task<List<FileInfo>> GetFilesDirectoriesInFolderAsync(string relativeFolderPath);
 
-        Task SaveFileAsync(byte[] file, string filePath);
+        Task SaveFileAsync(byte[] file, string rootFolder, string filePath);
     }
 }
