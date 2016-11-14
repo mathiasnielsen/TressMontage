@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TressMontage.Client.Core.Common;
 using TressMontage.Client.Core.Features.Base;
 using TressMontage.Client.Core.Http.Clients;
@@ -11,6 +12,7 @@ namespace TressMontage.Client.Core.Features.DataMagazine
 {
     public class DataMagazineViewModel : BindableViewModelBase
     {
+        public const string FolderParameterKey = nameof(FolderParameterKey);
         private const string RootFolderName = "DataMagazines";
 
         private readonly IFileInfoManager fileInfoManager;
@@ -39,15 +41,34 @@ namespace TressMontage.Client.Core.Features.DataMagazine
             set { Set(ref fileInfos, value); }
         }
 
-        public override async Task OnViewInitialized()
+        public override async Task OnViewInitialized(Dictionary<string, string> parms)
         {
-            var rootFolders = await fileInfoManager.GetFoldersAsync(RootFolderName) as IEnumerable<FileInfo>;
-            var rootFiles = await fileInfoManager.GetFilesDirectoriesInFolderAsync(RootFolderName) as IEnumerable<FileInfo>;
+            Folder folder = null;
+            if (parms.Keys.Contains(FolderParameterKey))
+            {
+                folder = JsonConvert.DeserializeObject<Folder>(parms[FolderParameterKey]);
+            }
 
-            var fileInfos = rootFolders.Concat(rootFiles);
+            if (folder == null)
+            {
+                var rootFolders = await fileInfoManager.GetFoldersAsync(RootFolderName) as IEnumerable<FileInfo>;
+                var rootFiles = await fileInfoManager.GetFilesDirectoriesInFolderAsync(RootFolderName) as IEnumerable<FileInfo>;
+                AssignFileInfo(rootFolders, rootFiles);
+            }
+            else
+            {
+                var folders = await fileInfoManager.GetFoldersFromFullPath(folder.Path) as IEnumerable<FileInfo>;
+                var files = await fileInfoManager.GetFilesDirectoriesInFolderFromFullPathAsync(folder.Path) as IEnumerable<FileInfo>;
+                AssignFileInfo(folders, files);
+            }
+
+            await base.OnViewInitialized(parms);
+        }
+
+        private void AssignFileInfo(IEnumerable<FileInfo> folders, IEnumerable<FileInfo> files)
+        {
+            var fileInfos = folders.Concat(files);
             FileInfos = fileInfos.ToList();
-
-            await base.OnViewInitialized();
         }
 
         private async Task SaveFileSync(byte[] file, string path)
@@ -57,6 +78,16 @@ namespace TressMontage.Client.Core.Features.DataMagazine
 
         private void HandleSelectedFileInfo(FileInfo fileInfo)
         {
+            if (fileInfo is Folder)
+            {
+                var folder = fileInfo as Folder;
+                navigationService.NavigateToDataMagazine(folder);
+            }
+
+            if (fileInfo.FileType == FileType.pdf)
+            {
+                navigationService.NavigateToPdfViewer(fileInfo.Path);
+            }
         }
 
         private async void Update()

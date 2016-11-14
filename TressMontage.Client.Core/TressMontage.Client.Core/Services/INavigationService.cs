@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TressMontage.Entities;
 
 namespace TressMontage.Client.Core.Services
 {
@@ -14,6 +15,8 @@ namespace TressMontage.Client.Core.Services
 
         void NavigateToMap();
 
-        void NavigateToDataMagazine();
+        void NavigateToDataMagazine(Folder folder = null);
+
+        void NavigateToPdfViewer(string pdfPath);
     }
 }

@@ -6,7 +6,8 @@ namespace TressMontage.Client.Controls
 {
     public class ClickableListView : ListView
     {
-        public static BindableProperty ItemClickCommandProperty = BindableProperty.Create(nameof(ItemClickCommand), typeof(ICommand), typeof(ClickableListView), null);
+        public static BindableProperty ItemClickCommandProperty = 
+            BindableProperty.Create(nameof(ItemClickCommand), typeof(ICommand), typeof(ClickableListView), null);
 
         public ClickableListView()
         {

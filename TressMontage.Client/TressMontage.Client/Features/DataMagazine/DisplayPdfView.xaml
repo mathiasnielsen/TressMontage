@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<base:ViewBase xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:TressMontage.Client.Features.Base;assembly=TressMontage.Client"
+             xmlns:controls="clr-namespace:TressMontage.Client.Controls;assembly=TressMontage.Client"
+             x:Class="TressMontage.Client.Features.DataMagazine.DisplayPdfView">
+    <Grid
+        Style="{StaticResource FormsGrid}">
+        <controls:CustomWebView
+            Uri="{Binding PdfPath}"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand" />
+        
+        <!--<controls:CustomWebView 
+            Uri="BookPreview2-Ch18-Rel0417.pdf" 
+            HorizontalOptions="FillAndExpand" 
+            VerticalOptions="FillAndExpand" />-->
+    </Grid>
+</base:ViewBase>

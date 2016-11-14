@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="FileInfo.cs" />
+    <Compile Include="FileType.cs" />
     <Compile Include="Folder.cs" />
     <Compile Include="MagazineCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -20,6 +20,22 @@ namespace TressMontage.Client.Services
             LocalStorageUrl = FileSystem.Current.LocalStorage.Path;
         }
 
+        public async Task<List<Folder>> GetFoldersFromFullPath(string fullPath)
+        {
+            var subFolders = await GetFolderDirectoriesFromFullPathAsync(fullPath);
+            var folders = subFolders.Select(x => new Folder() { Name = x.Name, Path = x.Path });
+
+            return folders.ToList();
+        }
+
+        public async Task<List<FileInfo>> GetFilesDirectoriesInFolderFromFullPathAsync(string fullPath)
+        {
+            var folder = await FileSystem.Current.GetFolderFromPathAsync(fullPath);
+            var files = await folder.GetFilesAsync();
+
+            return files.Select(file => new FileInfo() { Name = file.Name, Path = file.Path, Type = file.Name.GetFileType() }).ToList();
+        }
+
         public async Task<List<Folder>> GetFoldersAsync(string relativeFolderPath)
         {
             var subFolders = await GetFolderDirectoriesAsync(relativeFolderPath);
@@ -36,6 +52,13 @@ namespace TressMontage.Client.Services
             var files = await folder.GetFilesAsync();
 
             return files.Select(file => new FileInfo() { Name = file.Name, Path = file.Path, Type = file.Name.GetFileType() }).ToList();
+        }
+
+        private async Task<IList<IFolder>> GetFolderDirectoriesFromFullPathAsync(string folderPath)
+        {
+            var rootFolder = await FileSystem.Current.GetFolderFromPathAsync(folderPath);
+            var subFolders = await rootFolder?.GetFoldersAsync();
+            return subFolders;
         }
 
         private async Task<IList<IFolder>> GetFolderDirectoriesAsync(string folderPath)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TressMontage.Client.Core.Features.Base;
+using TressMontage.Client.Services;
 using Xamarin.Forms;
 
 namespace TressMontage.Client.Features.Base
@@ -13,6 +14,8 @@ namespace TressMontage.Client.Features.Base
         public BindableViewModelBase ViewModel { get; set; }
 
         private bool hasAppeared;
+
+        private Dictionary<string, string> parameters;
 
         protected abstract BindableViewModelBase OnPrepareViewModel();
 
@@ -28,9 +31,11 @@ namespace TressMontage.Client.Features.Base
         {
             base.OnAppearing();
 
+            var args = this.GetNavigationArgs();
+
             if (hasAppeared == false)
             {
-                ViewModel.ViewInitialized();
+                ViewModel.ViewInitialized(args);
                 hasAppeared = true;
             }
             else

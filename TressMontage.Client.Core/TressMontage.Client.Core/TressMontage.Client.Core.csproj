@@ -46,6 +46,7 @@
     <Compile Include="Features\Base\BindableViewModelBase.cs" />
     <Compile Include="Features\Base\ViewModelBase.cs" />
     <Compile Include="Features\DataMagazine\DataMagazineViewModel.cs" />
+    <Compile Include="Features\DataMagazine\DisplayPdfViewModel.cs" />
     <Compile Include="Features\Home\HomeViewModel.cs" />
     <Compile Include="Features\Map\MapsViewModel.cs" />
     <Compile Include="Http\Clients\ITressMontageApi.cs" />

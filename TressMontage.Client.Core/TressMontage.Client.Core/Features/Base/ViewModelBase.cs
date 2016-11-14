@@ -39,9 +39,9 @@ namespace TressMontage.Client.Core.Features.Base
 
         public string Title { get; set; }
 
-        public async void ViewInitialized()
+        public async void ViewInitialized(Dictionary<string, string> parameters)
         {
-            await OnViewInitialized();
+            await OnViewInitialized(parameters);
         }
 
         public async void ViewReloading()
@@ -49,7 +49,7 @@ namespace TressMontage.Client.Core.Features.Base
             await OnViewReloaded();
         }
 
-        public virtual async Task OnViewInitialized()
+        public virtual async Task OnViewInitialized(Dictionary<string, string> parameters)
         {
             await Task.FromResult(true);
         }

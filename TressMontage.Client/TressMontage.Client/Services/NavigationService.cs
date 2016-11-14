@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using TressMontage.Client.Core.Features.DataMagazine;
 using TressMontage.Client.Core.Services;
 using TressMontage.Client.Features.DataMagazine;
 using TressMontage.Client.Features.Home;
 using TressMontage.Client.Features.Map;
 using TressMontage.Client.Features.ServiceReport;
+using TressMontage.Entities;
 
 namespace TressMontage.Client.Services
 {
@@ -19,6 +22,7 @@ namespace TressMontage.Client.Services
             Configure(nameof(DataMagazineView), typeof(DataMagazineView));
             Configure(nameof(MapView), typeof(MapView));
             Configure(nameof(ServiceReportView), typeof(ServiceReportView));
+            Configure(nameof(DisplayPdfView), typeof(DisplayPdfView));
         }
 
         public void NavigateToHome()
@@ -26,9 +30,19 @@ namespace TressMontage.Client.Services
             NavigateTo(nameof(HomeView));
         }
 
-        public void NavigateToDataMagazine()
+        public void NavigateToDataMagazine(Folder folder = null)
         {
-            NavigateTo(nameof(DataMagazineView));
+            if (folder != null)
+            {
+                var parms = new Dictionary<string, string>();
+                parms.Add(DataMagazineViewModel.FolderParameterKey, JsonConvert.SerializeObject(folder));
+
+                NavigateTo(nameof(DataMagazineView), parameter: parms);
+            }
+            else
+            {
+                NavigateTo(nameof(DataMagazineView));
+            }
         }
 
         public void NavigateToMap()
@@ -39,6 +53,14 @@ namespace TressMontage.Client.Services
         public void NavigateToServiceReport()
         {
             NavigateTo(nameof(ServiceReportView));
+        }
+
+        public void NavigateToPdfViewer(string pdfPath)
+        {
+            var parms = new Dictionary<string, string>();
+            parms.Add(DisplayPdfViewModel.PdfPathParameterKey, JsonConvert.SerializeObject(pdfPath));
+
+            NavigateTo(nameof(DisplayPdfView), parameter: parms);
         }
     }
 }
