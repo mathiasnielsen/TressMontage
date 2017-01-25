@@ -1,47 +1,87 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using PCLStorage;
 using TressMontage.Client.Core.Services;
-using TressMontage.Entities;
-using TressMontage.Client.Extensions;
-using System.IO;
 
 namespace TressMontage.Client.Services
 {
     public class FileInfoManager : IFileInfoManager
     {
-        private string LocalStorageUrl;
+        private const char DirectorySeperator = '/';
+        private readonly IFolder rootFolder;
 
         public FileInfoManager()
         {
-            LocalStorageUrl = FileSystem.Current.LocalStorage.Path;
+            rootFolder = FileSystem.Current.LocalStorage;
         }
 
-        public async Task<List<Folder>> GetFoldersAsync(string relativeFolderPath)
+        public async Task<IFolder> RetrieveOrConstructFeatureRootDirectory(string featureDirectoryName)
         {
-            var subFolders = await GetFolderDirectoriesAsync(relativeFolderPath);
-            var folders = subFolders.Select(x => new Folder() { Name = x.Name, Path = x.Path });
+            IFolder featureFolder;
+            var doesFeatureDirectoryExist = await rootFolder.CheckExistsAsync(featureDirectoryName);
+            if (doesFeatureDirectoryExist == ExistenceCheckResult.NotFound)
+            {
+                featureFolder = await rootFolder.CreateFolderAsync(featureDirectoryName, CreationCollisionOption.ReplaceExisting);
+            }
+            else
+            {
+                featureFolder = await rootFolder.GetFolderAsync(featureDirectoryName);
+            }
 
-            return folders.ToList();
+            return featureFolder;
         }
 
-        public async Task<List<FileInfo>> GetFilesDirectoriesInFolderAsync(string relativeFolderPath)
+        public async Task<IList<IFolder>> GetFoldersFromRootFoldersAsync(string featureDirectoryName)
         {
-            var path = LocalStorageUrl + "\\" + relativeFolderPath;
+            await RetrieveOrConstructFeatureRootDirectory(featureDirectoryName);
 
-            var folder = await FileSystem.Current.GetFolderFromPathAsync(path);
+            var featureRootFolder = await rootFolder.GetFolderAsync(featureDirectoryName);
+            var featureFolders = await featureRootFolder.GetFoldersAsync();
+
+            return featureFolders;
+        }
+
+        public async Task<IList<IFolder>> GetFoldersInDirectoryAsync(string featureDirectoryName, string relativeFolderPath)
+        {
+            IList<IFolder> folders;
+
+            var doesFolderExist = await rootFolder.CheckExistsAsync(relativeFolderPath);
+            if (doesFolderExist != ExistenceCheckResult.NotFound)
+            {
+                folders = await GetFolderDirectoriesAsync(relativeFolderPath);
+                return folders;
+            }
+
+            return default(IList<IFolder>);
+        }
+
+        public async Task<IList<IFile>> GetFilesDirectoriesInFolderAsync(string relativeFolderPath)
+        {
+            var folder = await rootFolder.GetFolderAsync(relativeFolderPath);
             var files = await folder.GetFilesAsync();
 
-            return files.Select(file => new FileInfo() { Name = file.Name, Path = file.Path, Type = file.Name.GetFileType() }).ToList();
+            return files;
+        }
+
+        public async Task<bool> DeleteMagazineFolderAsync(string featureDirectoryName)
+        {
+            var doesFeatureDirectoryExistResult = await rootFolder.CheckExistsAsync(featureDirectoryName);
+            if (doesFeatureDirectoryExistResult == ExistenceCheckResult.FolderExists)
+            {
+                var featureFolder = await rootFolder.GetFolderAsync(featureDirectoryName);
+                await featureFolder.DeleteAsync();
+                return true;
+            }
+
+            return false;
         }
 
         private async Task<IList<IFolder>> GetFolderDirectoriesAsync(string folderPath)
         {
-            var rootFolder = await FileSystem.Current.LocalStorage.GetFolderAsync(folderPath);
-            var subFolders = await rootFolder?.GetFoldersAsync();
+            var folder = await rootFolder.GetFolderAsync(folderPath);
+            var subFolders = await folder.GetFoldersAsync();
             return subFolders;
         }
 
@@ -51,12 +91,14 @@ namespace TressMontage.Client.Services
             return files;
         }
 
-        public async Task SaveFileAsync(byte[] file, string rootFolder, string relativeFilePath)
+        public async Task SaveFileAsync(byte[] file, string featureDirectoryName, string relativeFilePath)
         {
             var fileName = Path.GetFileName(relativeFilePath);
 
-            var path = $"{LocalStorageUrl}\\{rootFolder}\\{relativeFilePath}";
+            var path =
+                $"{rootFolder.Path}{DirectorySeperator}{featureDirectoryName}{DirectorySeperator}{relativeFilePath}";
             var directory = Path.GetDirectoryName(path);
+
             var directoryResult = await FileSystem.Current.GetFolderFromPathAsync(directory);
             if (directoryResult != null)
             {
@@ -64,40 +106,20 @@ namespace TressMontage.Client.Services
                 var folder = await FileSystem.Current.GetFolderFromPathAsync(directory);
                 await SaveFileToValidPath(file, folder, fileName);
             }
-
-            var pathSplitted = GetPathSplitted(relativeFilePath);
-            if (pathSplitted.Count == 1)
-            {
-                var folder = await FileSystem.Current.LocalStorage.CreateFolderAsync(rootFolder, CreationCollisionOption.OpenIfExists);
-                await SaveFileToValidPath(file, folder, fileName);
-            }
             else
             {
-                var folder = await ConstructDirectoryWithSubDirectoriesAsync(rootFolder, pathSplitted);
-                await SaveFileToValidPath(file, folder, fileName);
-            }
-        }
-
-        private async Task<IFolder> ConstructDirectoryWithSubDirectoriesAsync(string rootFolder, List<string> directories)
-        {
-            directories.RemoveAt(directories.Count - 1);
-
-            var url = $"{LocalStorageUrl}\\{rootFolder}\\";
-            var finalFolder = await FileSystem.Current.LocalStorage.GetFolderAsync(rootFolder);
-            for (int index = 0; index < directories.Count; index++)
-            {
-                var newUrl = $@"{url}{directories[index]}\";
-                if (await FileSystem.Current.GetFolderFromPathAsync(newUrl) == null)
+                var pathSplitted = GetPathSplitted(relativeFilePath);
+                if (pathSplitted.Count == 1)
                 {
-                    // If not exisiting then create one.
-                    var test = await finalFolder.CreateFolderAsync(directories[index], CreationCollisionOption.ReplaceExisting);
+                    var folder = await FileSystem.Current.LocalStorage.CreateFolderAsync(featureDirectoryName, CreationCollisionOption.OpenIfExists);
+                    await SaveFileToValidPath(file, folder, fileName);
                 }
-
-                url = newUrl;
-                finalFolder = await FileSystem.Current.GetFolderFromPathAsync(url);
+                else
+                {
+                    var folder = await rootFolder.CreateFolderAsync(directory, CreationCollisionOption.ReplaceExisting);
+                    await SaveFileToValidPath(file, folder, fileName);
+                }
             }
-
-            return finalFolder;
         }
 
         private async Task SaveFileToValidPath(byte[] file, IFolder folder, string fileName)
@@ -111,7 +133,7 @@ namespace TressMontage.Client.Services
 
         private List<string> GetPathSplitted(string filePath)
         {
-            var levels = filePath.Split('/');
+            var levels = filePath.Split(DirectorySeperator);
             return levels?.ToList();
         }
     }

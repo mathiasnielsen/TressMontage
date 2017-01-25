@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TressMontage.Enitites;
 
 namespace TressMontage.Entities
 {
@@ -12,6 +13,6 @@ namespace TressMontage.Entities
 
         public string Path { get; set; }
 
-        public string Type { get; set; }
+        public FileTypes Type { get; set; }
     }
 }

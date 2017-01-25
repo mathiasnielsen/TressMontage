@@ -1,27 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Practices.Unity;
 using TressMontage.Client.Core.Features.Base;
-using TressMontage.Client.Core.Features.DataMagazine;
 using TressMontage.Client.Features.Base;
 using Xamarin.Forms;
-using Microsoft.Practices.Unity;
-using System.IO;
 
 namespace TressMontage.Client.Features.DataMagazine
 {
-    public partial class DataMagazineView : ViewBase
+    public abstract class DataMagazineViewBase : BindableViewBase<DataMagazineViewModel>
+    { 
+    }
+
+    public partial class DataMagazineView : DataMagazineViewBase
     {
         public DataMagazineView()
         {
             InitializeComponent();
+
+            var deleteMagazinesButton = new ToolbarItem("Delete", null, DeleteMagazines);
+            ToolbarItems.Add(deleteMagazinesButton);
         }
 
-        protected override BindableViewModelBase OnPrepareViewModel()
+        protected override DataMagazineViewModel OnPrepareViewModel()
         {
             return App.Container.Resolve<DataMagazineViewModel>();
+        }
+
+        private void DeleteMagazines()
+        {
+            ViewModel.DeleteAllCommand.Execute(null);
         }
     }
 }

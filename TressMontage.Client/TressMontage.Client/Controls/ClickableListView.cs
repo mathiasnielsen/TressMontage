@@ -1,12 +1,12 @@
 ﻿using System.Windows.Input;
-using Windows.UI.Xaml;
 using Xamarin.Forms;
 
 namespace TressMontage.Client.Controls
 {
     public class ClickableListView : ListView
     {
-        public static BindableProperty ItemClickCommandProperty = BindableProperty.Create(nameof(ItemClickCommand), typeof(ICommand), typeof(ClickableListView), null);
+        public static BindableProperty ItemClickCommandProperty = 
+            BindableProperty.Create(nameof(ItemClickCommand), typeof(ICommand), typeof(ClickableListView), null);
 
         public ClickableListView()
         {

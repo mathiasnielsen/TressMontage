@@ -32,31 +32,11 @@ namespace TressMontage.Client.Core.Features.Base
             return true;
         }
 
+        protected Dictionary<string, string> NavigationParameters { get; set; }
+
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public string Title { get; set; }
-
-        public async void ViewInitialized()
-        {
-            await OnViewInitialized();
-        }
-
-        public async void ViewReloading()
-        {
-            await OnViewReloaded();
-        }
-
-        public virtual async Task OnViewInitialized()
-        {
-            await Task.FromResult(true);
-        }
-
-        public virtual async Task OnViewReloaded()
-        {
-            await Task.FromResult(true);
         }
     }
 }

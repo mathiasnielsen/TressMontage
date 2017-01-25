@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TressMontage.Client.Core;
 using TressMontage.Client.Core.Services;
 using TressMontage.Client.Features.DataMagazine;
 using TressMontage.Client.Features.Home;
@@ -19,6 +20,7 @@ namespace TressMontage.Client.Services
             Configure(nameof(DataMagazineView), typeof(DataMagazineView));
             Configure(nameof(MapView), typeof(MapView));
             Configure(nameof(ServiceReportView), typeof(ServiceReportView));
+            Configure(nameof(DisplayPDFView), typeof(DisplayPDFView));
         }
 
         public void NavigateToHome()
@@ -26,9 +28,19 @@ namespace TressMontage.Client.Services
             NavigateTo(nameof(HomeView));
         }
 
-        public void NavigateToDataMagazine()
+        public void NavigateToDataMagazine(string directory = null)
         {
-            NavigateTo(nameof(DataMagazineView));
+            if (directory == null)
+            {
+                NavigateTo(nameof(DataMagazineView));
+            }
+            else
+            { 
+                var parms = new Dictionary<string, string>();
+                parms.Add(DataMagazineViewModel.RelativeDirectoryParameterKey, directory);
+
+                NavigateTo(nameof(DataMagazineView), parameter: parms);
+            }
         }
 
         public void NavigateToMap()
@@ -39,6 +51,14 @@ namespace TressMontage.Client.Services
         public void NavigateToServiceReport()
         {
             NavigateTo(nameof(ServiceReportView));
+        }
+
+        public void NavigateToDisplayPDF(string pdfDirectory)
+        {
+            var parms = new Dictionary<string, string>();
+            parms.Add(DisplayPDFViewModel.PDFDirectoryParameterKey, pdfDirectory);
+
+            NavigateTo(nameof(DisplayPDFView), parameter: parms);
         }
     }
 }

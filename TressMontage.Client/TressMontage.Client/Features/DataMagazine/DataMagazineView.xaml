@@ -1,18 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<base:ViewBase xmlns="http://xamarin.com/schemas/2014/forms"
+<?xml version="1.0" encoding="utf-8" ?>
+<local:DataMagazineViewBase xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:base="clr-namespace:TressMontage.Client.Features.Base;assembly=TressMontage.Client"
+             xmlns:local="clr-namespace:TressMontage.Client.Features.DataMagazine;assembly=TressMontage.Client"
              xmlns:controls="clr-namespace:TressMontage.Client.Controls;assembly=TressMontage.Client"
-             x:Class="TressMontage.Client.Features.DataMagazine.DataMagazineView">
+             x:Class="TressMontage.Client.Features.DataMagazine.DataMagazineView"
+			 Title="{Binding Title}">
     <Grid
         Style="{StaticResource FormsGrid}">
         <StackLayout
             Orientation="Vertical"
             Spacing="{StaticResource NextControlSpacing}">
-            <Label 
-                Text="Data Magazines" 
-                VerticalOptions="Center" 
-                HorizontalOptions="Center" />
             <controls:ClickableListView
                 x:Name="Folders"
                 ItemClickCommand="{Binding FileInfoSelectedCommand}"
@@ -44,4 +41,4 @@
                 Command="{Binding UpdateCommand}"/>
         </StackLayout>
     </Grid>
-</base:ViewBase>
+</local:DataMagazineViewBase>

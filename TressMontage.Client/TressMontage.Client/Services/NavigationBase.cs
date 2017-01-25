@@ -23,7 +23,7 @@ namespace TressMontage.Client.Services
 
         public void GoBack() => MainPage.Navigation.PopAsync();
 
-        public void NavigateTo(string pageKey, object parameter = null,
+        public void NavigateTo(string pageKey, Dictionary<string, string> parameter = null,
             HistoryBehavior historyBehavior = HistoryBehavior.Default)
         {
             Type pageType;
@@ -34,12 +34,13 @@ namespace TressMontage.Client.Services
 
                 if (historyBehavior == HistoryBehavior.ClearHistory)
                 {
-                    MainPage.Navigation.InsertPageBefore(displayPage,
-                        MainPage.Navigation.NavigationStack[0]);
+                    MainPage.Navigation.InsertPageBefore(displayPage, MainPage.Navigation.NavigationStack[0]);
 
                     var existingPages = MainPage.Navigation.NavigationStack.ToList();
                     for (int i = 1; i < existingPages.Count; i++)
+                    { 
                         MainPage.Navigation.RemovePage(existingPages[i]);
+                    }
                 }
                 else
                 {
@@ -56,18 +57,19 @@ namespace TressMontage.Client.Services
 
     public static class NavigationExtensions
     {
-        private static ConditionalWeakTable<Page, object> arguments
-            = new ConditionalWeakTable<Page, object>();
+        private static ConditionalWeakTable<Page, Dictionary<string, string>> arguments = new ConditionalWeakTable<Page, Dictionary<string, string>>();
 
-        public static object GetNavigationArgs(this Page page)
+        public static Dictionary<string, string> GetNavigationArgs(this Page page)
         {
-            object argument = null;
+            Dictionary<string, string> argument = null;
             arguments.TryGetValue(page, out argument);
 
             return argument;
         }
 
-        public static void SetNavigationArgs(this Page page, object args)
-            => arguments.Add(page, args);
+        public static void SetNavigationArgs(this Page page, Dictionary<string, string> args)
+        {
+            arguments.Add(page, args);
+        }
     }
 }

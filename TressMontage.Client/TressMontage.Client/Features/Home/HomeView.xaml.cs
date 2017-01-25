@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Practices.Unity;
 using TressMontage.Client.Core.Features.Base;
-using TressMontage.Client.Features.Base;
-using Xamarin.Forms;
-using Microsoft.Practices.Unity;
 using TressMontage.Client.Core.Features.Home;
+using TressMontage.Client.Features.Base;
 
 namespace TressMontage.Client.Features.Home
 {
-    public partial class HomeView : ViewBase
+    public abstract class HomeViewBase : BindableViewBase<HomeViewModel> 
+    {
+    }
+
+    public partial class HomeView : HomeViewBase
     {
         public HomeView()
         {
             InitializeComponent();
         }
 
-        protected override BindableViewModelBase OnPrepareViewModel()
+        protected override HomeViewModel OnPrepareViewModel()
         {
             return App.Container.Resolve<HomeViewModel>();
         }
