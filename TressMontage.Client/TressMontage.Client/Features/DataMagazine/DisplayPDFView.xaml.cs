@@ -13,10 +13,5 @@ namespace TressMontage.Client.Features.DataMagazine
         {
             InitializeComponent();
         }
-
-        protected override DisplayPDFViewModel OnPrepareViewModel()
-        {
-            return new DisplayPDFViewModel();
-        }
     }
 }

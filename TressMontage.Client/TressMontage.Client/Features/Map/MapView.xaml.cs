@@ -20,10 +20,5 @@ namespace TressMontage.Client.Features.Map
                 Url = "https://batchgeo.com/map/c245459265ab8747b90e21edb898ab2c",
             };
         }
-
-        protected override MapsViewModel OnPrepareViewModel()
-        {
-            return App.Container.Resolve<MapsViewModel>();
-        }
     }
 }

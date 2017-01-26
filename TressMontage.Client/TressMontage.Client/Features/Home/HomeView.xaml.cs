@@ -15,10 +15,5 @@ namespace TressMontage.Client.Features.Home
         {
             InitializeComponent();
         }
-
-        protected override HomeViewModel OnPrepareViewModel()
-        {
-            return App.Container.Resolve<HomeViewModel>();
-        }
     }
 }

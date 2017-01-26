@@ -1,6 +1,7 @@
 ﻿using System;
 using TressMontage.Client.Core.Features.Base;
 using TressMontage.Client.Services;
+using Microsoft.Practices.Unity;
 
 namespace TressMontage.Client.Features.Base
 {
@@ -29,6 +30,9 @@ namespace TressMontage.Client.Features.Base
             }
         }
 
-        protected abstract TViewModel OnPrepareViewModel();
+        protected virtual TViewModel OnPrepareViewModel()
+        { 
+            return App.Container.Resolve<TViewModel>();
+        }
     }
 }
