@@ -10,6 +10,7 @@ namespace TressMontage.Client.Controls
 
         public ClickableListView()
         {
+            ////SeparatorVisibility = SeparatorVisibility.None;
             ItemTapped += OnItemTapped;
         }
 

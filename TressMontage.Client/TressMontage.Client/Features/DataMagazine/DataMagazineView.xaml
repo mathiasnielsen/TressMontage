@@ -5,31 +5,42 @@
              xmlns:controls="clr-namespace:TressMontage.Client.Controls;assembly=TressMontage.Client"
              x:Class="TressMontage.Client.Features.DataMagazine.DataMagazineView"
 			 Title="{Binding Title}">
-    <Grid
-        Style="{StaticResource FormsGrid}">
+	<Grid
+		BackgroundColor="{StaticResource Grey}">
         <StackLayout
             Orientation="Vertical"
             Spacing="{StaticResource NextControlSpacing}">
             <controls:ClickableListView
                 x:Name="Folders"
+				HasUnevenRows="true"
+				BackgroundColor="Transparent"
                 ItemClickCommand="{Binding FileInfoSelectedCommand}"
                 ItemsSource="{Binding FileInfos}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <Grid
-                                Padding="20, 10, 10, 20"
-                                BackgroundColor="{StaticResource SecondaryBrandColor}">
+								VerticalOptions="CenterAndExpand"
+                                Padding="20, 20, 20, 20">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="50" />
                                 </Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+							        <RowDefinition Height="*"/>
+							    </Grid.RowDefinitions>
                                 <Label 
                                     Text="{Binding Name, Mode=TwoWay}"
-                                    VerticalOptions="Center"
-                                    HorizontalOptions="Fill" />
+									TextColor="{StaticResource DarkTextColor}"
+									LineBreakMode="TailTruncation"
+									VerticalOptions="CenterAndExpand"
+                                    HorizontalOptions="Start" />
                                 <Label
                                     Grid.Column="1"
+									TextColor="{StaticResource DarkTextColor}"
+									FontSize="{StaticResource FontSizeSmall}"
+									VerticalOptions="CenterAndExpand"
+									HorizontalTextAlignment="Center"
                                     Text="{Binding Type}"/>
                             </Grid>
                         </ViewCell>
@@ -40,5 +51,5 @@
                 Text="Update"
                 Command="{Binding UpdateCommand}"/>
         </StackLayout>
-    </Grid>
+	</Grid>
 </local:DataMagazineViewBase>

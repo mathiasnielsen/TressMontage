@@ -13,15 +13,23 @@
             <!-- COLORS -->
             <Color
                 x:Key="White">#FFFFFFFF</Color>
+			<Color
+				x:Key="Grey">#FFC6CAC5</Color>
             <Color
                 x:Key="BrandColor">#FF00A654</Color>
+            <Color
+                x:Key="DebugColor">#FF00FF00</Color>
             <Color
                 x:Key="SecondaryBrandColor">#FFFFc0cb</Color>
             <Color
                 x:Key="ContentBackgroundColor">#FF00A654</Color>
+            <Color
+                x:Key="DarkTextColor">#FF000000</Color>
             <!-- Font sizes -->
             <x:Double
                 x:Key="FontSizeBig">30</x:Double>
+            <x:Double
+                x:Key="FontSizeSmall">10</x:Double>
 
             <!-- DEFAULT Styles -->
             <Style

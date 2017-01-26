@@ -2,9 +2,9 @@
 <local:DisplayPDFViewBase xmlns="http://xamarin.com/schemas/2014/forms" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:local="clr-namespace:TressMontage.Client.Features.DataMagazine;assembly=TressMontage.Client"
-	x:Class="TressMontage.Client.Features.DataMagazine.DisplayPDFView">
-    <Grid
-        Style="{StaticResource FormsGrid}">
+	x:Class="TressMontage.Client.Features.DataMagazine.DisplayPDFView"
+	Title="{Binding Title}">
+    <Grid>
 		<local:CustomWebView 
 			Uri="{Binding PDFDirectory}" 
 			HorizontalOptions="FillAndExpand" 
