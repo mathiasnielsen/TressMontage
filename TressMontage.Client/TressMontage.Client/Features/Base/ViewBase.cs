@@ -23,18 +23,24 @@ namespace TressMontage.Client.Features.Base
 
             if (IsContentRelativeLayout())
             {
+                var stackLayout = new StackLayout();
+                stackLayout.Padding = new Thickness(20, 20, 20, 40);
+                stackLayout.VerticalOptions = LayoutOptions.CenterAndExpand;
+                stackLayout.HorizontalOptions = LayoutOptions.CenterAndExpand;
+
+                var activitySpinner = new ActivityIndicator();
+                activitySpinner.Color = Color.White;
+                activitySpinner.IsVisible = true;
+                activitySpinner.IsRunning = true;
+
+                stackLayout.Children.Add(activitySpinner);
+
                 loadingContainer = new StackLayout();
+                loadingContainer.VerticalOptions = LayoutOptions.FillAndExpand;
+                loadingContainer.HorizontalOptions = LayoutOptions.FillAndExpand;
                 loadingContainer.BackgroundColor = new Color(0, 0, 0, 0.4f);
 
-                var loadingLabel = new Label()
-                {
-                    Text = "Loading..."
-                };
-
-                loadingLabel.VerticalOptions = LayoutOptions.Center;
-                loadingLabel.HorizontalOptions = LayoutOptions.Center;
-
-                loadingContainer.Children.Add(loadingLabel);
+                loadingContainer.Children.Add(stackLayout);
 
                 var centerX = Constraint.RelativeToParent(parent => 0);
                 var centerY = Constraint.RelativeToParent(parent => 0);
@@ -46,6 +52,11 @@ namespace TressMontage.Client.Features.Base
 
                 loadingContainer.IsVisible = false;
             }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
         }
 
         private bool IsContentRelativeLayout()

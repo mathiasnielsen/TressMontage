@@ -39,8 +39,8 @@ namespace TressMontage.Client.Features.DataMagazine
             fileMapper = new FileMapper();
 
             FileInfoSelectedCommand = new RelayCommand<FileInfo>(HandleSelectedFileInfo);
-            UpdateCommand = new RelayCommand(Update);
-            DeleteAllCommand = new RelayCommand(DeleteAll);
+            UpdateCommand = new RelayCommand(UpdateAsync);
+            DeleteAllCommand = new RelayCommand(DeleteAllAsync);
         }
 
         public RelayCommand<FileInfo> FileInfoSelectedCommand { get; }
@@ -63,31 +63,37 @@ namespace TressMontage.Client.Features.DataMagazine
 
         public override async Task OnViewInitialized(Dictionary<string, string> navigationParameters)
         {
-            await fileInfoManager.RetrieveOrConstructFeatureRootDirectory(RootFolderName);
+            using (loadingManager.CreateLoadingScope())
+            {
+                await fileInfoManager.RetrieveOrConstructFeatureRootDirectory(RootFolderName);
 
-            if (navigationParameters.ContainsKey(RelativeDirectoryParameterKey))
-            {
-                subDirectory = navigationParameters[RelativeDirectoryParameterKey];
-                Title = $"../{Path.GetFileName(subDirectory)}";
-                await GetDataFromDirectoryAsync(subDirectory);
-            }
-            else
-            {
-                Title = "Data Magazines";
-                await GetDataFromRootFolderAsync();
+                if (navigationParameters.ContainsKey(RelativeDirectoryParameterKey))
+                {
+                    subDirectory = navigationParameters[RelativeDirectoryParameterKey];
+                    Title = $"../{Path.GetFileName(subDirectory)}";
+                    await GetDataFromDirectoryAsync(subDirectory);
+                }
+                else
+                {
+                    Title = "Data Magazines";
+                    await GetDataFromRootFolderAsync();
+                }   
             }
         }
 
         public override async Task OnViewReloaded()
         {
-            var isSubDirectory = string.IsNullOrWhiteSpace(subDirectory) == false;
-            if (isSubDirectory)
+            using (loadingManager.CreateLoadingScope())
             {
-                await GetDataFromDirectoryAsync(subDirectory);
-            }
-            else
-            {
-                await GetDataFromRootFolderAsync();
+                var isSubDirectory = string.IsNullOrWhiteSpace(subDirectory) == false;
+                if (isSubDirectory)
+                {
+                    await GetDataFromDirectoryAsync(subDirectory);
+                }
+                else
+                {
+                    await GetDataFromRootFolderAsync();
+                }   
             }
         }
 
@@ -134,7 +140,7 @@ namespace TressMontage.Client.Features.DataMagazine
             }
         }
 
-        private async void Update()
+        private async void UpdateAsync()
         {
             using (loadingManager.CreateLoadingScope())
             {
@@ -153,12 +159,15 @@ namespace TressMontage.Client.Features.DataMagazine
             }
         }
 
-        private async void DeleteAll()
+        private async void DeleteAllAsync()
         {
-            var hasDeleted = await fileInfoManager.DeleteMagazineFolderAsync(RootFolderName);
-            if (hasDeleted)
-            {
-                FileInfos = new List<FileInfo>();
+            using (loadingManager.CreateLoadingScope())
+            { 
+                var hasDeleted = await fileInfoManager.DeleteMagazineFolderAsync(RootFolderName);
+                if (hasDeleted)
+                {
+                    FileInfos = new List<FileInfo>();
+                }
             }
         }
     }
