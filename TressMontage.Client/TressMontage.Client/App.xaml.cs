@@ -40,7 +40,7 @@ namespace TressMontage.Client
             InitializeComponent();
 
             var content = new HomeView();
-            MainPage = new MasterNavigationPage(content);
+            MainPage = new NavigationPage(content);
         }
 
         protected override void OnStart()

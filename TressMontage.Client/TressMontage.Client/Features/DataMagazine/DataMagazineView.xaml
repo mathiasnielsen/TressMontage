@@ -5,8 +5,9 @@
              xmlns:controls="clr-namespace:TressMontage.Client.Controls;assembly=TressMontage.Client"
              x:Class="TressMontage.Client.Features.DataMagazine.DataMagazineView"
 			 Title="{Binding Title}">
-		<Grid
+		<RelativeLayout
 			BackgroundColor="{StaticResource Grey}">
+		<Grid>
 	        <StackLayout
 	            Orientation="Vertical"
 	            Spacing="{StaticResource NextControlSpacing}">
@@ -51,4 +52,6 @@
 	                Text="Update"
 	                Command="{Binding UpdateCommand}"/>
 	        </StackLayout>
+			</Grid>
+		</RelativeLayout>
 </local:DataMagazineViewBase>

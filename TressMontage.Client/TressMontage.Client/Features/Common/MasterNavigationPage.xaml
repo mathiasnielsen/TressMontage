@@ -2,5 +2,5 @@
 <NavigationPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TressMontage.Client.Features.Common.MasterNavigationPage">
-    <Label Text="HENNING" VerticalOptions="Center" HorizontalOptions="Center" />
+    <Label Text="HENNING" VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="Fuchsia"/>
 </NavigationPage>

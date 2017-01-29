@@ -23,10 +23,12 @@ namespace TressMontage.Client.iOS
             {
                 SetNativeControl(new UIWebView());
             }
+
             if (e.OldElement != null)
             {
                 // Cleanup
             }
+
             if (e.NewElement != null)
             {
                 var customWebView = Element as CustomWebView;
