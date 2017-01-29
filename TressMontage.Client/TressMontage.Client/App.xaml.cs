@@ -7,6 +7,7 @@ using Microsoft.Practices.Unity;
 using TressMontage.Client.Core.Http;
 using TressMontage.Client.Core.Http.Clients;
 using TressMontage.Client.Core.Services;
+using TressMontage.Client.Core.Utilities;
 using TressMontage.Client.Extensions;
 using TressMontage.Client.Features.Common;
 using TressMontage.Client.Features.Home;
@@ -72,6 +73,7 @@ namespace TressMontage.Client
             _container.RegisterSingleton<IFileInfoManager, FileInfoManager>();
             _container.RegisterSingleton<IHttpClientFactory, HttpClientFactory>();
             _container.RegisterSingleton<ITressMontageApi, TressMontageApi>();
+            _container.RegisterSingleton<ILoadingManager, LoadingManager>();
         }
     }
 }

@@ -19,6 +19,11 @@ namespace TressMontage.Client.Features.DataMagazine
             ToolbarItems.Add(deleteMagazinesButton);
         }
 
+        protected override DataMagazineViewModel OnPrepareViewModel()
+        {
+            return App.Container.Resolve<DataMagazineViewModel>(new ParameterOverride("loadingManager", LoadingManager));
+        }
+
         private void DeleteMagazines()
         {
             ViewModel.DeleteAllCommand.Execute(null);

@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using TressMontage.Client.Core.Common;
+using TressMontage.Client.Core.Extensions;
 using TressMontage.Client.Core.Features.Base;
 using TressMontage.Client.Core.Http.Clients;
 using TressMontage.Client.Core.Services;
+using TressMontage.Client.Core.Utilities;
 using TressMontage.Client.Utilities;
 using TressMontage.Entities;
 
@@ -21,16 +23,19 @@ namespace TressMontage.Client.Features.DataMagazine
         private readonly INavigationService navigationService;
         private readonly ITressMontageApi api;
         private readonly FileMapper fileMapper;
+        private readonly ILoadingManager loadingManager;
 
         private List<FileInfo> fileInfos;
         private string title;
         private string subDirectory;
 
-        public DataMagazineViewModel(ITressMontageApi api, INavigationService navigationService, IFileInfoManager fileInfoManager)
+        public DataMagazineViewModel(ITressMontageApi api, INavigationService navigationService, IFileInfoManager fileInfoManager, ILoadingManager loadingManager)
         {
-            this.navigationService = navigationService;
-            this.fileInfoManager = fileInfoManager;
-            this.api = api;
+            this.navigationService = navigationService.ThrowIfParameterIsNull(nameof(navigationService));
+            this.fileInfoManager = fileInfoManager.ThrowIfParameterIsNull(nameof(fileInfoManager));
+            this.api = api.ThrowIfParameterIsNull(nameof(api));
+            this.loadingManager = loadingManager.ThrowIfParameterIsNull(nameof(loadingManager));
+
             fileMapper = new FileMapper();
 
             FileInfoSelectedCommand = new RelayCommand<FileInfo>(HandleSelectedFileInfo);
@@ -131,8 +136,11 @@ namespace TressMontage.Client.Features.DataMagazine
 
         private async void Update()
         {
-            await RetrieveDataMagazinesFromApiAsync();
-            await GetDataFromRootFolderAsync();
+            using (loadingManager.CreateLoadingScope())
+            {
+                await RetrieveDataMagazinesFromApiAsync();
+                await GetDataFromRootFolderAsync();
+            }
         }
 
         private async Task RetrieveDataMagazinesFromApiAsync()
