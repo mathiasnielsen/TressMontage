@@ -9,7 +9,6 @@ namespace TressMontage.Client.Services
 {
     public class FileInfoManager : IFileInfoManager
     {
-        private const char DirectorySeperator = '/';
         private readonly IFolder rootFolder;
 
         public FileInfoManager()
@@ -95,8 +94,7 @@ namespace TressMontage.Client.Services
         {
             var fileName = Path.GetFileName(relativeFilePath);
 
-            var path =
-                $"{rootFolder.Path}{DirectorySeperator}{featureDirectoryName}{DirectorySeperator}{relativeFilePath}";
+            var path = Path.Combine(rootFolder.Path, featureDirectoryName, relativeFilePath);
             var directory = Path.GetDirectoryName(path);
 
             var directoryResult = await FileSystem.Current.GetFolderFromPathAsync(directory);
@@ -108,8 +106,7 @@ namespace TressMontage.Client.Services
             }
             else
             {
-                var pathSplitted = GetPathSplitted(relativeFilePath);
-                if (pathSplitted.Count == 1)
+                if (IsPathRooted(relativeFilePath))
                 {
                     var folder = await FileSystem.Current.LocalStorage.CreateFolderAsync(featureDirectoryName, CreationCollisionOption.OpenIfExists);
                     await SaveFileToValidPath(file, folder, fileName);
@@ -131,10 +128,10 @@ namespace TressMontage.Client.Services
             }
         }
 
-        private List<string> GetPathSplitted(string filePath)
+        private bool IsPathRooted(string filePath)
         {
-            var levels = filePath.Split(DirectorySeperator);
-            return levels?.ToList();
+            var directoryName = Path.GetDirectoryName(filePath);
+            return string.IsNullOrEmpty(directoryName);
         }
     }
 }
