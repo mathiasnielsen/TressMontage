@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TressMontage.Entities;
 
 namespace TressMontage.Client.Core.Http.Clients
 {
@@ -16,10 +17,17 @@ namespace TressMontage.Client.Core.Http.Clients
             executor = new HttpRequestExecutor(httpClientFactory);
         }
 
-        public async Task<List<string>> GetFileNamesAsync()
+        public async Task<List<FileInfoDTO>> GetFileNamesAsync()
         {
-            var fileNames = await executor.Get<List<string>>(baseUrl + "datamagazines/fileNames");
-            return fileNames;
+            try
+            {
+                var fileNames = await executor.Get<List<FileInfoDTO>>(baseUrl + "datamagazines/fileNames");
+                return fileNames;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Could not get filenames");
+            }
         }
 
         public async Task<List<byte[]>> GetFilesAsync()
@@ -28,7 +36,7 @@ namespace TressMontage.Client.Core.Http.Clients
             var files = new List<byte[]>();
             foreach (var fileName in fileNames)
             {
-                var fileAsByteArray = await GetFileAsync(fileName);
+                var fileAsByteArray = await GetFileAsync(fileName.Path);
                 files.Add(fileAsByteArray);
             }
 
@@ -37,9 +45,18 @@ namespace TressMontage.Client.Core.Http.Clients
 
         public async Task<byte[]> GetFileAsync(string fileName)
         {
-            var result = await executor.Get<byte[]>(baseUrl + $"datamagazines/{fileName}");
+            try
+            {
+                var result = await executor.Get<byte[]>(baseUrl + $"datamagazines/{fileName}");
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Could not get file: {ex.Message}");
+            }
+
+            return new byte[0];
         }
     }
 }

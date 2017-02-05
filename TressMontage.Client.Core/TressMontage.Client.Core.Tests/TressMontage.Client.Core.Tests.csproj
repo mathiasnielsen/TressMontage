@@ -73,6 +73,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\TressMontage.Shared\TressMontage.Entities\TressMontage.Entities.csproj">
+      <Project>{BD8178BE-D924-4F2F-821F-C7FA03BAAA5F}</Project>
+      <Name>TressMontage.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TressMontage.Shared\TressMontage.Utilities\TressMontage.Utilities.csproj">
+      <Project>{D713D782-471C-4443-9FF2-02F6FB3F0783}</Project>
+      <Name>TressMontage.Utilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TressMontage.Client.Core\TressMontage.Client.Core.csproj">
       <Project>{71CEBBE1-ACF6-40BC-9F80-CB1AA0148CE8}</Project>
       <Name>TressMontage.Client.Core</Name>

@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using TressMontage.Entities;
 
 namespace TressMontage.Client.Core.Http.Clients
 {
     public interface ITressMontageApi
     {
-        Task<List<string>> GetFileNamesAsync();
+        Task<List<FileInfoDTO>> GetFileNamesAsync();
 
         Task<byte[]> GetFileAsync(string fileName);
 

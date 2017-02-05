@@ -1,5 +1,4 @@
-﻿using System;
-namespace TressMontage.Enitites
+﻿namespace TressMontage.Utilities
 {
     public enum FileTypes
     {

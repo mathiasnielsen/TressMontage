@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TressMontage.Client.Core.Http;
 using TressMontage.Client.Core.Http.Clients;
+using TressMontage.Entities;
 
 namespace TressMontage.Client.Core.Tests
 {
@@ -40,7 +41,9 @@ namespace TressMontage.Client.Core.Tests
             var api = new TressMontageApi(httpFactory);
 
             var fileNames = await api.GetFileNamesAsync();
-            var file = await api.GetFileAsync(fileNames.FirstOrDefault());
+            var fileName = fileNames.FirstOrDefault();
+
+            var file = await api.GetFileAsync(fileName.Path);
 
             var testFilePath = @"C:\temp\test.txt";
             File.WriteAllBytes(testFilePath, file);
@@ -48,19 +51,19 @@ namespace TressMontage.Client.Core.Tests
             Assert.IsNotNull(file);
         }
 
-        [TestMethod]
-        public async Task RetriveFile_andSave()
-        {
-            var httpFactory = new HttpClientFactory();
-            var api = new TressMontageApi(httpFactory);
+        ////[TestMethod]
+        ////public async Task RetriveFile_andSave()
+        ////{
+        ////    var httpFactory = new HttpClientFactory();
+        ////    var api = new TressMontageApi(httpFactory);
 
-            var fileNames = await api.GetFileNamesAsync();
-            var file = await api.GetFileAsync(fileNames.FirstOrDefault(x => x.Contains(".pdf")));
+        ////    var fileNames = await api.GetFileNamesAsync();
+        ////    var file = await api.GetFileAsync(fileNames.FirstOrDefault(x => x.Type == TressMontage.Utilities.FileTypes.PDF).Path);
 
-            var testFilePath = @"C:\temp\test.pdf";
-            File.WriteAllBytes(testFilePath, file);
+        ////    var testFilePath = @"C:\temp\test.pdf";
+        ////    File.WriteAllBytes(testFilePath, file);
 
-            Assert.IsNotNull(file);
-        }
+        ////    Assert.IsNotNull(file);
+        ////}
     }
 }

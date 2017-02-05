@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TressMontage.Entities;
 using TressMontage.Server.Api.Controllers;
+using TressMontage.Utilities;
 
 namespace TressMontage.Server.Api.Controller.Tests
 {
@@ -18,14 +20,23 @@ namespace TressMontage.Server.Api.Controller.Tests
 
             var dataMagazineAsText = "12345678";
             var dataMagazineAsByteArray = Convert.FromBase64String(dataMagazineAsText);
-            var test = Convert.ToBase64String(dataMagazineAsByteArray);
-            var test02 = Convert.ToBase64String(dataMagazineAsByteArray, 0, dataMagazineAsByteArray.Length);
 
-            var blobPath = "Test Path.txt";
+            var fileInfo = new FileInfo()
+            {
+                Name = "test blob path",
+                Path = "testPath",
+                Type = FileTypes.TXT
+            };
 
-            var postResult = await controller.PostDataMagazineAsync(dataMagazineAsByteArray, blobPath);
+            var fileDto = new FileDTO()
+            {
+                Data = dataMagazineAsByteArray,
+                FileInfo = fileInfo
+            };
 
-            var postedMagazine = await controller.GetDataMagazineAsync(blobPath);
+            var postResult = await controller.PostDataMagazineAsync(fileDto);
+
+            var postedMagazine = await controller.GetDataMagazineAsync(fileInfo.Name);
             var postedMagazineAsText = Convert.ToBase64String(postedMagazine, 0, postedMagazine.Length);
 
             Assert.IsTrue(postResult);
@@ -33,11 +44,11 @@ namespace TressMontage.Server.Api.Controller.Tests
         }
 
         [TestMethod]
-        public async Task DataManazinesController_GetBlobUrls_NotNull()
+        public void DataManazinesController_GetBlobUrls_NotNull()
         {
             var controller = new DataMagazinesController();
 
-            var result = await controller.GetDataMagazinesNamesAsync();
+            var result = controller.GetDataMagazinesInfo();
 
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Any() == true);
@@ -48,16 +59,15 @@ namespace TressMontage.Server.Api.Controller.Tests
         {
             var controller = new DataMagazinesController();
 
-            var blobNames = await controller.GetDataMagazinesNamesAsync();
+            var magazineInfos = controller.GetDataMagazinesInfo();
             var  files = new List<byte[]>();
-            foreach (var blobName in blobNames)
+            foreach (var info in magazineInfos)
             {
-                var fileNameAsBytes = Encoding.UTF8.GetBytes(blobName);
-                var encodedFileName = Convert.ToBase64String(fileNameAsBytes);
-
-                var file = await controller.GetDataMagazineAsync(encodedFileName);
+                var file = await controller.GetDataMagazineAsync(info.Path);
                 files.Add(file);
             }
+
+            Assert.IsTrue(files.Any());
 
             foreach (var file in files)
             {

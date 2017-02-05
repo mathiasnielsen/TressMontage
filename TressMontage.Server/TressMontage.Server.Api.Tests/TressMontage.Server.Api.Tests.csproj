@@ -71,6 +71,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\TressMontage.Shared\TressMontage.Entities\TressMontage.Entities.csproj">
+      <Project>{BD8178BE-D924-4F2F-821F-C7FA03BAAA5F}</Project>
+      <Name>TressMontage.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TressMontage.Shared\TressMontage.Utilities\TressMontage.Utilities.csproj">
+      <Project>{D713D782-471C-4443-9FF2-02F6FB3F0783}</Project>
+      <Name>TressMontage.Utilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TressMontage.Server.Api\TressMontage.Server.Api.csproj">
       <Project>{8ADA8D28-A9A5-41BE-904D-5BD4D8D991FA}</Project>
       <Name>TressMontage.Server.Api</Name>

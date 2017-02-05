@@ -11,6 +11,8 @@ using System.Web.Http;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using TressMontage.Entities;
+using TressMontage.Utilities;
 
 namespace TressMontage.Server.Api.Controllers
 {
@@ -22,15 +24,34 @@ namespace TressMontage.Server.Api.Controllers
 
         [Route("datamagazines/fileNames")]
         [HttpGet]
-        public async Task<List<string>> GetDataMagazinesNamesAsync()
+        public List<FileInfoDTO> GetDataMagazinesInfo()
         {
             var blobs = GetBlobsInContainer();
 
             var blobUrl = blobs.Select(x => x.Name);
 
-            var blobNamesAsList = blobUrl.ToList();
+            var blobsAsFileInfoDTO = new List<FileInfoDTO>();
+            foreach (var blob in blobs)
+            {
+                var fileInfoDto = GetFileInfoFromBlob(blob);
+                blobsAsFileInfoDTO.Add(fileInfoDto);
+            }
 
-            return blobNamesAsList;
+            return blobsAsFileInfoDTO;
+            ////return blobsAsFileInfoDTO.Select(x => x.Name).ToList();
+        }
+
+        private FileInfoDTO GetFileInfoFromBlob(CloudBlockBlob blob)
+        {
+            var fileInfoDto = new FileInfoDTO();
+
+            fileInfoDto.Name = Path.GetFileNameWithoutExtension(blob.Name);
+            ////fileInfoDto.Path = blob.Name;
+
+            ////var fileMapper = new FileMapper();
+            ////fileInfoDto.Type = fileMapper.GetFileType(blob.Name);
+
+            return fileInfoDto;
         }
 
         [Route("datamagazines/{blobName}")]
@@ -67,13 +88,13 @@ namespace TressMontage.Server.Api.Controllers
 
         [Route("datamagazines")]
         [HttpPost]
-        public async Task<bool> PostDataMagazineAsync(byte[] dataMagazine, string filePathInBlob)
+        public async Task<bool> PostDataMagazineAsync(FileDTO fileDto)
         {
-            var result = await UploadBlobIntoContainer(filePathInBlob, dataMagazine);
+            var result = await UploadBlobIntoContainer(fileDto);
             return result;
         }
 
-        private async Task<bool> UploadBlobIntoContainer(string filePathInBlob, byte[] dataMagazine)
+        private async Task<bool> UploadBlobIntoContainer(FileDTO fileDto)
         {
             try
             {
@@ -87,11 +108,11 @@ namespace TressMontage.Server.Api.Controllers
                 CloudBlobContainer container = blobClient.GetContainerReference(ContainerName);
 
                 // Retrieve reference to a blob named "myblob".
-                CloudBlockBlob blockBlob = container.GetBlockBlobReference(filePathInBlob);
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileDto.FileInfo.Name);
                 ////CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileInfo.Name);
 
                 // Create or overwrite the "myblob" blob with contents from a local file.
-                await blockBlob.UploadFromByteArrayAsync(dataMagazine, 0, dataMagazine.Length);
+                await blockBlob.UploadFromByteArrayAsync(fileDto.Data, 0, fileDto.Data.Length);
                 return true;
             }
             catch (Exception ex)

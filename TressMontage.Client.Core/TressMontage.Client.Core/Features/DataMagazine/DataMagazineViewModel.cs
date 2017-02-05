@@ -11,6 +11,7 @@ using TressMontage.Client.Core.Services;
 using TressMontage.Client.Core.Utilities;
 using TressMontage.Client.Utilities;
 using TressMontage.Entities;
+using TressMontage.Utilities;
 
 namespace TressMontage.Client.Features.DataMagazine
 {
@@ -22,7 +23,7 @@ namespace TressMontage.Client.Features.DataMagazine
         private readonly IFileInfoManager fileInfoManager;
         private readonly INavigationService navigationService;
         private readonly ITressMontageApi api;
-        private readonly FileMapper fileMapper;
+        private readonly FileInfoMapper fileMapper;
         private readonly ILoadingManager loadingManager;
 
         private List<FileInfo> fileInfos;
@@ -36,7 +37,7 @@ namespace TressMontage.Client.Features.DataMagazine
             this.api = api.ThrowIfParameterIsNull(nameof(api));
             this.loadingManager = loadingManager.ThrowIfParameterIsNull(nameof(loadingManager));
 
-            fileMapper = new FileMapper();
+            fileMapper = new FileInfoMapper();
 
             FileInfoSelectedCommand = new RelayCommand<FileInfo>(HandleSelectedFileInfo);
             UpdateCommand = new RelayCommand(UpdateAsync);
@@ -130,11 +131,11 @@ namespace TressMontage.Client.Features.DataMagazine
         {
             switch (fileInfo.Type)
             {
-                case Enitites.FileTypes.FOLDER:
+                case FileTypes.FOLDER:
                     navigationService.NavigateToDataMagazine(fileInfo.Path);
                     break;
 
-                case Enitites.FileTypes.PDF:
+                case FileTypes.PDF:
                     navigationService.NavigateToDisplayPDF(fileInfo.Path);
                     break;
             }
@@ -154,8 +155,8 @@ namespace TressMontage.Client.Features.DataMagazine
             var fileDirectories = await api.GetFileNamesAsync();
             foreach (var fileDirectory in fileDirectories)
             {
-                var file = await api.GetFileAsync(fileDirectory);
-                await SaveFileSync(file, fileDirectory);
+                var file = await api.GetFileAsync(fileDirectory.Path);
+                await SaveFileSync(file, fileDirectory.Path);
             }
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TressMontage.Client.Core.Extensions
+namespace TressMontage.Utitlies.Extensions
 {
     public static class StringExtensions
     {

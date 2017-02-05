@@ -39,6 +39,10 @@
       <Project>{BD8178BE-D924-4F2F-821F-C7FA03BAAA5F}</Project>
       <Name>TressMontage.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\TressMontage.Shared\TressMontage.Utilities\TressMontage.Utilities.csproj">
+      <Project>{D713D782-471C-4443-9FF2-02F6FB3F0783}</Project>
+      <Name>TressMontage.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\RelayCommand.cs" />
@@ -62,8 +66,7 @@
     <Compile Include="Services\IFileSystem.cs" />
     <Compile Include="Services\INavigationService.cs" />
     <Compile Include="Services\IStorageService.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Utilitites\FileMapper.cs" />
+    <Compile Include="Utilitites\FileInfoMapper.cs" />
     <Compile Include="Features\DataMagazine\DisplayPDFViewModel.cs" />
     <Compile Include="Utilitites\AsyncLock.cs" />
     <Compile Include="Utilitites\LoadingManager.cs" />
@@ -99,10 +102,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-    <Folder Include="Utilitites\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
