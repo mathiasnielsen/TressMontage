@@ -6,11 +6,32 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TressMontage.Server.Api.Controllers;
 
-namespace TressMontage.Server.Api.Tests
+namespace TressMontage.Server.Api.Controller.Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class DataMagazinesControllerTests
     {
+        [TestMethod]
+        public async Task DataManazinesController_PostBlob_PostSucceded()
+        {
+            var controller = new DataMagazinesController();
+
+            var dataMagazineAsText = "12345678";
+            var dataMagazineAsByteArray = Convert.FromBase64String(dataMagazineAsText);
+            var test = Convert.ToBase64String(dataMagazineAsByteArray);
+            var test02 = Convert.ToBase64String(dataMagazineAsByteArray, 0, dataMagazineAsByteArray.Length);
+
+            var blobPath = "Test Path.txt";
+
+            var postResult = await controller.PostDataMagazineAsync(dataMagazineAsByteArray, blobPath);
+
+            var postedMagazine = await controller.GetDataMagazineAsync(blobPath);
+            var postedMagazineAsText = Convert.ToBase64String(postedMagazine, 0, postedMagazine.Length);
+
+            Assert.IsTrue(postResult);
+            Assert.IsTrue(dataMagazineAsText == postedMagazineAsText);
+        }
+
         [TestMethod]
         public async Task DataManazinesController_GetBlobUrls_NotNull()
         {

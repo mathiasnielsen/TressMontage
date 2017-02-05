@@ -37,9 +37,7 @@ namespace TressMontage.Client.Core.Http.Clients
 
         public async Task<byte[]> GetFileAsync(string fileName)
         {
-            var fileNameAsBytes = Encoding.UTF8.GetBytes(fileName);
-            var encodedFileName = Convert.ToBase64String(fileNameAsBytes);
-            var result = await executor.Get<byte[]>(baseUrl + $"datamagazines/{encodedFileName}");
+            var result = await executor.Get<byte[]>(baseUrl + $"datamagazines/{fileName}");
 
             return result;
         }

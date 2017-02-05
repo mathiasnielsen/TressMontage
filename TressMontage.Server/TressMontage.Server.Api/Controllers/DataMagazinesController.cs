@@ -6,7 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Http;
+using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -22,7 +24,6 @@ namespace TressMontage.Server.Api.Controllers
         [HttpGet]
         public async Task<List<string>> GetDataMagazinesNamesAsync()
         {
-            ////var blobs = await ListBlobsInContainerAsync();
             var blobs = GetBlobsInContainer();
 
             var blobUrl = blobs.Select(x => x.Name);
@@ -36,26 +37,69 @@ namespace TressMontage.Server.Api.Controllers
         [HttpGet]
         public async Task<byte[]> GetDataMagazineAsync(string blobName)
         {
-            var blobNameAsBytes = Convert.FromBase64String(blobName);
-            var decodedFileName = Encoding.UTF8.GetString(blobNameAsBytes);
-
-            // Retrieve storage account from connection string.
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConnectionString);
-
-            // Create the blob client.
-            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-
-            // Retrieve reference to a previously created container.
-            CloudBlobContainer container = blobClient.GetContainerReference(ContainerName);
-
-            CloudBlob blob = container.GetBlobReference(decodedFileName);
-
-            ////// Save blob contents to a file.
-            using (var fileStream = new MemoryStream())
+            try
             {
-                await blob.DownloadToStreamAsync(fileStream);
-                return fileStream.ToArray();
+                // Retrieve storage account from connection string.
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConnectionString);
+
+                // Create the blob client.
+                CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+                // Retrieve reference to a previously created container.
+                CloudBlobContainer container = blobClient.GetContainerReference(ContainerName);
+
+                CloudBlob blob = container.GetBlobReference(blobName);
+
+                ////// Save blob contents to a file.
+                using (var fileStream = new MemoryStream())
+                {
+                    await blob.DownloadToStreamAsync(fileStream);
+                    return fileStream.ToArray();
+                }
             }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Could not get magazine: {ex.Message}");
+            }
+
+            return new byte[0];
+        }
+
+        [Route("datamagazines")]
+        [HttpPost]
+        public async Task<bool> PostDataMagazineAsync(byte[] dataMagazine, string filePathInBlob)
+        {
+            var result = await UploadBlobIntoContainer(filePathInBlob, dataMagazine);
+            return result;
+        }
+
+        private async Task<bool> UploadBlobIntoContainer(string filePathInBlob, byte[] dataMagazine)
+        {
+            try
+            {
+                // Retrieve storage account from connection string.
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConnectionString);
+
+                // Create the blob client.
+                CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+                // Retrieve reference to a previously created container.
+                CloudBlobContainer container = blobClient.GetContainerReference(ContainerName);
+
+                // Retrieve reference to a blob named "myblob".
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference(filePathInBlob);
+                ////CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileInfo.Name);
+
+                // Create or overwrite the "myblob" blob with contents from a local file.
+                await blockBlob.UploadFromByteArrayAsync(dataMagazine, 0, dataMagazine.Length);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Could not upload data magazine: {ex.Message}");
+            }
+
+            return false;
         }
 
         private IEnumerable<CloudBlockBlob> GetBlobsInContainer()
@@ -73,7 +117,7 @@ namespace TressMontage.Server.Api.Controllers
             return blobs;
         }
 
-        private static async Task<List<IListBlobItem>> ListBlobsInContainerAsync()
+        private async Task<List<IListBlobItem>> ListBlobsInContainerAsync()
         {
             // Retrieve storage account from connection string.
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConnectionString);
@@ -92,7 +136,7 @@ namespace TressMontage.Server.Api.Controllers
             return list;
         }
 
-        public static async Task<IEnumerable<IListBlobItem>> ListBlobsSegmentedInFlatListing(CloudBlobContainer container)
+        public async Task<IEnumerable<IListBlobItem>> ListBlobsSegmentedInFlatListing(CloudBlobContainer container)
         {
             //List blobs to the console window, with paging.
             Console.WriteLine("List blobs in pages:");
