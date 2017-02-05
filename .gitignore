@@ -240,3 +240,4 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/TressMontage.Client/TressMontage.Client.Droid/TressMontage.Client.Droid.csproj.bak
