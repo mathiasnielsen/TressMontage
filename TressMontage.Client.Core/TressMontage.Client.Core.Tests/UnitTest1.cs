@@ -51,19 +51,19 @@ namespace TressMontage.Client.Core.Tests
             Assert.IsNotNull(file);
         }
 
-        ////[TestMethod]
-        ////public async Task RetriveFile_andSave()
-        ////{
-        ////    var httpFactory = new HttpClientFactory();
-        ////    var api = new TressMontageApi(httpFactory);
+        [TestMethod]
+        public async Task RetriveFile_andSave()
+        {
+            var httpFactory = new HttpClientFactory();
+            var api = new TressMontageApi(httpFactory);
 
-        ////    var fileNames = await api.GetFileNamesAsync();
-        ////    var file = await api.GetFileAsync(fileNames.FirstOrDefault(x => x.Type == TressMontage.Utilities.FileTypes.PDF).Path);
+            var fileNames = await api.GetFileNamesAsync();
+            var file = await api.GetFileAsync(fileNames.FirstOrDefault(x => x.Type == TressMontage.Utilities.FileTypes.PDF).Path);
 
-        ////    var testFilePath = @"C:\temp\test.pdf";
-        ////    File.WriteAllBytes(testFilePath, file);
+            var testFilePath = @"C:\temp\test.pdf";
+            File.WriteAllBytes(testFilePath, file);
 
-        ////    Assert.IsNotNull(file);
-        ////}
+            Assert.IsNotNull(file);
+        }
     }
 }

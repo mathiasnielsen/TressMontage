@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
-using TressMontage.Entities.JsonConverters;
 using TressMontage.Utilities;
-using System.Data
 
 namespace TressMontage.Entities
 {
@@ -13,7 +11,6 @@ namespace TressMontage.Entities
         [JsonProperty("path")]
         public string Path { get; set; }
 
-        ////[JsonConverter(typeof(FileTypeConverter))]
         [JsonProperty("type")]
         public FileTypes Type { get; set; }
     }

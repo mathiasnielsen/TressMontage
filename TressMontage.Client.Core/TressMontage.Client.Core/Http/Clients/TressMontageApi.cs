@@ -45,18 +45,8 @@ namespace TressMontage.Client.Core.Http.Clients
 
         public async Task<byte[]> GetFileAsync(string fileName)
         {
-            try
-            {
-                var result = await executor.Get<byte[]>(baseUrl + $"datamagazines/{fileName}");
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Could not get file: {ex.Message}");
-            }
-
-            return new byte[0];
+            var result = await executor.Get<byte[]>(baseUrl + $"datamagazines/{fileName}");
+            return result;
         }
     }
 }

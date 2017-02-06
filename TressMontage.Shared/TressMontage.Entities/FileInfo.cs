@@ -1,4 +1,5 @@
-﻿using TressMontage.Utilities;
+﻿using Newtonsoft.Json;
+using TressMontage.Utilities;
 
 namespace TressMontage.Entities
 {
