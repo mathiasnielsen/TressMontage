@@ -26,7 +26,7 @@ namespace TressMontage.Client.Features.DataMagazine
         private readonly FileInfoMapper fileMapper;
         private readonly ILoadingManager loadingManager;
 
-        private List<FileInfo> fileInfos;
+        private List<FileDirective> fileInfos;
         private string title;
         private string subDirectory;
 
@@ -39,18 +39,18 @@ namespace TressMontage.Client.Features.DataMagazine
 
             fileMapper = new FileInfoMapper();
 
-            FileInfoSelectedCommand = new RelayCommand<FileInfo>(HandleSelectedFileInfo);
+            FileInfoSelectedCommand = new RelayCommand<FileDirective>(HandleSelectedFileInfo);
             UpdateCommand = new RelayCommand(UpdateAsync);
             DeleteAllCommand = new RelayCommand(DeleteAllAsync);
         }
 
-        public RelayCommand<FileInfo> FileInfoSelectedCommand { get; }
+        public RelayCommand<FileDirective> FileInfoSelectedCommand { get; }
 
         public RelayCommand UpdateCommand { get; }
 
         public RelayCommand DeleteAllCommand { get; }
 
-        public List<FileInfo> FileInfos
+        public List<FileDirective> FileInfos
         {
             get { return fileInfos; }
             set { Set(ref fileInfos, value); }
@@ -127,16 +127,16 @@ namespace TressMontage.Client.Features.DataMagazine
             await fileInfoManager.SaveFileAsync(file, RootFolderName, path);
         }
 
-        private void HandleSelectedFileInfo(FileInfo fileInfo)
+        private void HandleSelectedFileInfo(FileDirective fileInfo)
         {
             switch (fileInfo.Type)
             {
-                case FileTypes.FOLDER:
-                    navigationService.NavigateToDataMagazine(fileInfo.Path);
+                case DirectiveTypes.Folder:
+                    navigationService.NavigateToDataMagazine(fileInfo.Directory);
                     break;
 
-                case FileTypes.PDF:
-                    navigationService.NavigateToDisplayPDF(fileInfo.Path);
+                case DirectiveTypes.PDF:
+                    navigationService.NavigateToDisplayPDF(fileInfo.Directory);
                     break;
             }
         }
@@ -155,8 +155,8 @@ namespace TressMontage.Client.Features.DataMagazine
             var fileDirectories = await api.GetFileNamesAsync();
             foreach (var fileDirectory in fileDirectories)
             {
-                var file = await api.GetFileAsync(fileDirectory.Path);
-                await SaveFileSync(file, fileDirectory.Path);
+                var file = await api.GetFileAsync(fileDirectory.Directory);
+                await SaveFileSync(file, fileDirectory.Directory);
             }
         }
 
@@ -167,7 +167,7 @@ namespace TressMontage.Client.Features.DataMagazine
                 var hasDeleted = await fileInfoManager.DeleteMagazineFolderAsync(RootFolderName);
                 if (hasDeleted)
                 {
-                    FileInfos = new List<FileInfo>();
+                    FileInfos = new List<FileDirective>();
                 }
             }
         }

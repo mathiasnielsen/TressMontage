@@ -35,9 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="FileDTO.cs" />
-    <Compile Include="FileInfo.cs" />
-    <Compile Include="FileInfoCombiner.cs" />
-    <Compile Include="FileInfoDTO.cs" />
+    <Compile Include="FileDirective.cs" />
     <Compile Include="Folder.cs" />
     <Compile Include="MagazineCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

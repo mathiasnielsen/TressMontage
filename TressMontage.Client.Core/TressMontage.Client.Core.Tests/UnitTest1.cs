@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TressMontage.Client.Core.Http;
 using TressMontage.Client.Core.Http.Clients;
 using TressMontage.Entities;
+using TressMontage.Utilities;
 
 namespace TressMontage.Client.Core.Tests
 {
@@ -43,7 +44,7 @@ namespace TressMontage.Client.Core.Tests
             var fileNames = await api.GetFileNamesAsync();
             var fileName = fileNames.FirstOrDefault();
 
-            var file = await api.GetFileAsync(fileName.Path);
+            var file = await api.GetFileAsync(fileName.Directory);
 
             var testFilePath = @"C:\temp\test.txt";
             File.WriteAllBytes(testFilePath, file);
@@ -58,7 +59,7 @@ namespace TressMontage.Client.Core.Tests
             var api = new TressMontageApi(httpFactory);
 
             var fileNames = await api.GetFileNamesAsync();
-            var file = await api.GetFileAsync(fileNames.FirstOrDefault(x => x.Type == TressMontage.Utilities.FileTypes.PDF).Path);
+            var file = await api.GetFileAsync(fileNames.FirstOrDefault(x => x.Extension == ".pdf").Directory);
 
             var testFilePath = @"C:\temp\test.pdf";
             File.WriteAllBytes(testFilePath, file);

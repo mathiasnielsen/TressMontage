@@ -24,11 +24,9 @@ namespace TressMontage.Server.Api.Controller.Tests
             var dataMagazineAsText = "12345678";
             var dataMagazineAsByteArray = Convert.FromBase64String(dataMagazineAsText);
 
-            var fileInfo = new Entities.FileInfo()
+            var fileInfo = new FileDirective()
             {
-                Name = "test blob path",
-                Path = "testPath",
-                Type = FileTypes.TXT
+                BlobPath = "hello.png"
             };
 
             var fileDto = new FileDTO()
@@ -39,9 +37,7 @@ namespace TressMontage.Server.Api.Controller.Tests
 
             var postResult = await controller.PostDataMagazineAsync(fileDto);
 
-            var path = FileInfoCombiner.CombineFileName(fileInfo);
-
-            var response = await controller.GetDataMagazineAsync(path, fileInfo.Type.ToString());
+            var response = await controller.GetDataMagazineAsync(fileInfo.DirectoryWithName, fileInfo.ExtensionNoDot);
             var data = await GetDataFromResponseAsync<byte[]>(response);
 
             var postedMagazineAsText = Convert.ToBase64String(data, 0, data.Length);
@@ -56,37 +52,43 @@ namespace TressMontage.Server.Api.Controller.Tests
 
             var result = controller.GetDataMagazinesInfo();
             var content = await result.Content.ReadAsStringAsync();
-            var data = JsonConvert.DeserializeObject<List<FileInfoDTO>>(content);
+            var data = JsonConvert.DeserializeObject<List<Entities.FileDirective>>(content);
 
             Assert.IsNotNull(result);
             Assert.IsTrue(data.Any());
         }
 
-        ////[TestMethod]
-        ////public async Task DataManazinesController_GetFiles_NotNull()
-        ////{
-        ////    var controller = new DataMagazinesController();
+        [TestMethod]
+        public async Task DataManazinesController_GetFiles_NotNull()
+        {
+            var controller = new DataMagazinesController();
 
-        ////    var response = controller.GetDataMagazinesInfo();
-        ////    var data = await GetDataFromResponseAsync<List<FileInfoDTO>>(response);
+            var response = controller.GetDataMagazinesInfo();
+            var data = await GetDataFromResponseAsync<List<FileDirective>>(response);
 
-        ////    var files = new List<byte[]>();
-        ////    foreach (var info in data)
-        ////    {
-        ////        var fileInfoDTO = new FileInfoDTO() { Name = info.Name, Path = info.Path, Type = info.Type };
-        ////        var magazineResponse = await controller.GetDataMagazineAsync(fileInfoDTO);
-        ////        var magazineData = await GetDataFromResponseAsync<byte[]>(magazineResponse);
+            var files = new List<byte[]>();
+            foreach (var info in data)
+            {
+                try
+                {
+                    var magazineResponse = await controller.GetDataMagazineAsync(info.DirectoryWithName, info.ExtensionNoDot);
+                    var magazineData = await GetDataFromResponseAsync<byte[]>(magazineResponse);
 
-        ////        files.Add(magazineData);
-        ////    }
+                    files.Add(magazineData);
+                }
+                catch(Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Could not get magazine. {ex.Message}");
+                }
+            }
 
-        ////    Assert.IsTrue(files.Any());
+            Assert.IsTrue(files.Any());
 
-        ////    foreach (var file in files)
-        ////    {
-        ////        Assert.IsNotNull(file);
-        ////    }
-        ////}
+            foreach (var file in files)
+            {
+                Assert.IsNotNull(file);
+            }
+        }
 
         private async Task<TDataType> GetDataFromResponseAsync<TDataType>(HttpResponseMessage response)
         {

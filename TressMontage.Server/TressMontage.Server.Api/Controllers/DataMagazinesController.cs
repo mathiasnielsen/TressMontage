@@ -19,7 +19,7 @@ namespace TressMontage.Server.Api.Controllers
 
             var blobs = blobManager.GetBlobsInContainer();
 
-            var blobsAsFileInfoDTO = new List<FileInfoDTO>();
+            var blobsAsFileInfoDTO = new List<FileDirective>();
             foreach (var blob in blobs)
             {
                 var fileInfoDto = blobManager.GetFileInfoFromBlob(blob);

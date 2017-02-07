@@ -6,7 +6,7 @@ namespace TressMontage.Client.Core.Http.Clients
 {
     public interface ITressMontageApi
     {
-        Task<List<FileInfoDTO>> GetFileNamesAsync();
+        Task<List<FileDirective>> GetFileNamesAsync();
 
         Task<byte[]> GetFileAsync(string fileName);
 

@@ -1,10 +1,9 @@
 ﻿namespace TressMontage.Utilities
 {
-    public enum FileTypes
+    public enum DirectiveTypes
     {
-        UNKNOWN,
-        PDF,
-        TXT,
-        FOLDER,
+        Unknown,
+        Folder,
+        File
     }
 }

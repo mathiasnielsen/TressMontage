@@ -17,11 +17,11 @@ namespace TressMontage.Client.Core.Http.Clients
             executor = new HttpRequestExecutor(httpClientFactory);
         }
 
-        public async Task<List<FileInfoDTO>> GetFileNamesAsync()
+        public async Task<List<FileDirective>> GetFileNamesAsync()
         {
             try
             {
-                var fileNames = await executor.Get<List<FileInfoDTO>>(baseUrl + "datamagazines/fileNames");
+                var fileNames = await executor.Get<List<FileDirective>>(baseUrl + "datamagazines/fileNames");
                 return fileNames;
             }
             catch (Exception ex)
@@ -36,7 +36,7 @@ namespace TressMontage.Client.Core.Http.Clients
             var files = new List<byte[]>();
             foreach (var fileName in fileNames)
             {
-                var fileAsByteArray = await GetFileAsync(fileName.Path);
+                var fileAsByteArray = await GetFileAsync(fileName.Directory);
                 files.Add(fileAsByteArray);
             }
 

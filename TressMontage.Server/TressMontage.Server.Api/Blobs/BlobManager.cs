@@ -28,8 +28,7 @@ namespace TressMontage.Server.Api.Blobs
             CloudBlobContainer container = blobClient.GetContainerReference(ContainerName);
 
             // Retrieve reference to a blob named "myblob".
-            var fileName = FileInfoCombiner.CombineFileName(fileDto.FileInfo);
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName + "." + fileDto.FileInfo.Type.ToString());
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileDto.FileInfo.DirectoryWithName);
 
             // Create or overwrite the "myblob" blob with contents from a local file.
             await blockBlob.UploadFromByteArrayAsync(fileDto.Data, 0, fileDto.Data.Length);
@@ -123,15 +122,11 @@ namespace TressMontage.Server.Api.Blobs
             return resultSegment.Results;
         }
 
-        public FileInfoDTO GetFileInfoFromBlob(CloudBlockBlob blob)
+        public FileDirective GetFileInfoFromBlob(CloudBlockBlob blob)
         {
-            var fileInfoDto = new FileInfoDTO();
+            var fileInfoDto = new FileDirective();
 
-            fileInfoDto.Name = Path.GetFileNameWithoutExtension(blob.Name);
-            fileInfoDto.Path = Path.GetDirectoryName(blob.Name);
-
-            var fileMapper = new FileMapper();
-            fileInfoDto.Type = fileMapper.GetFileType(blob.Name);
+            fileInfoDto.BlobPath = blob.Name;
 
             return fileInfoDto;
         }

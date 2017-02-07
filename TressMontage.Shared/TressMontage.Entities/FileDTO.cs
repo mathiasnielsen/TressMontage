@@ -9,8 +9,8 @@ namespace TressMontage.Entities
 {
     public class FileDTO
     {
-        [JsonProperty("fileinfo")]
-        public FileInfo FileInfo { get; set; }
+        [JsonProperty("filedirective")]
+        public FileDirective FileInfo { get; set; }
 
         [JsonProperty("data")]
         public byte[] Data { get; set; }
