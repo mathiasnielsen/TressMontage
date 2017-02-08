@@ -133,7 +133,7 @@ namespace TressMontage.Client.Features.DataMagazine
             switch (fileInfo.Type)
             {
                 case DirectiveTypes.Folder:
-                    navigationService.NavigateToDataMagazine(fileInfo.Directory);
+                    navigationService.NavigateToDataMagazine(fileInfo.BlobPath);
                     break;
 
                 case DirectiveTypes.File:
@@ -146,8 +146,8 @@ namespace TressMontage.Client.Features.DataMagazine
         {
             switch(file.Extension)
             {
-                case "pdf":
-                    navigationService.NavigateToDisplayPDF(file.Directory);
+                case ".pdf":
+                    navigationService.NavigateToDisplayPDF(file.BlobPath);
                     break;
             }
         }

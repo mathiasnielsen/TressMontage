@@ -2,7 +2,7 @@
 {
     public enum DirectiveTypes
     {
-        Unknown,
+        Unknown = 0,
         Folder,
         File
     }

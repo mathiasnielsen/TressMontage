@@ -9,6 +9,8 @@ namespace TressMontage.Entities
         [JsonProperty("blobPath")]
         public string BlobPath { get; set; }
 
+        public DirectiveTypes Type { get; set; }
+
         public string Name { get { return Path.GetFileNameWithoutExtension(BlobPath); } }
 
         public string Directory { get { return Path.GetDirectoryName(BlobPath); } }
@@ -34,20 +36,6 @@ namespace TressMontage.Entities
             get
             {
                 return Path.Combine(Directory, Name);
-            }
-        }
-
-        public DirectiveTypes Type
-        {
-            get
-            {
-                var hasExtension = string.IsNullOrWhiteSpace(Extension) == false;
-                if (hasExtension)
-                {
-                    return DirectiveTypes.File;
-                }
-
-                return DirectiveTypes.Folder;
             }
         }
     }
