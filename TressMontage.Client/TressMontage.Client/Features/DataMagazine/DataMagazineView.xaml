@@ -42,7 +42,7 @@
 										FontSize="{StaticResource FontSizeSmall}"
 										VerticalOptions="CenterAndExpand"
 										HorizontalTextAlignment="Center"
-	                                    Text="{Binding Type}"/>
+	                                    Text="{Binding ExtensionNoDot}"/>
 	                            </Grid>
 	                        </ViewCell>
 	                    </DataTemplate>

@@ -8,7 +8,7 @@ namespace TressMontage.Client.Core.Http.Clients
     {
         Task<List<FileDirective>> GetFileNamesAsync();
 
-        Task<byte[]> GetFileAsync(string fileName);
+        Task<byte[]> GetFileAsync(string fileName, string extension);
 
         Task<List<byte[]>> GetFilesAsync();
     }

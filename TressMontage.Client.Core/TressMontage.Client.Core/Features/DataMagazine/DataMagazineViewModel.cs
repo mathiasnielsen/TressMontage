@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using TressMontage.Client.Core.Features.Base;
 using TressMontage.Client.Core.Http.Clients;
 using TressMontage.Client.Core.Services;
 using TressMontage.Client.Core.Utilities;
-using TressMontage.Client.Utilities;
+using TressMontage.Client.Core.Utilitites;
 using TressMontage.Entities;
 using TressMontage.Utilities;
 
@@ -39,7 +40,7 @@ namespace TressMontage.Client.Features.DataMagazine
 
             fileMapper = new FileInfoMapper();
 
-            FileInfoSelectedCommand = new RelayCommand<FileDirective>(HandleSelectedFileInfo);
+            FileInfoSelectedCommand = new RelayCommand<FileDirective>(HandleSelectedDirective);
             UpdateCommand = new RelayCommand(UpdateAsync);
             DeleteAllCommand = new RelayCommand(DeleteAllAsync);
         }
@@ -127,7 +128,7 @@ namespace TressMontage.Client.Features.DataMagazine
             await fileInfoManager.SaveFileAsync(file, RootFolderName, path);
         }
 
-        private void HandleSelectedFileInfo(FileDirective fileInfo)
+        private void HandleSelectedDirective(FileDirective fileInfo)
         {
             switch (fileInfo.Type)
             {
@@ -135,8 +136,18 @@ namespace TressMontage.Client.Features.DataMagazine
                     navigationService.NavigateToDataMagazine(fileInfo.Directory);
                     break;
 
-                case DirectiveTypes.PDF:
-                    navigationService.NavigateToDisplayPDF(fileInfo.Directory);
+                case DirectiveTypes.File:
+                    HandleSelectedFileType(fileInfo);
+                    break;
+            }
+        }
+
+        private void HandleSelectedFileType(FileDirective file)
+        {
+            switch(file.Extension)
+            {
+                case "pdf":
+                    navigationService.NavigateToDisplayPDF(file.Directory);
                     break;
             }
         }
@@ -153,11 +164,41 @@ namespace TressMontage.Client.Features.DataMagazine
         private async Task RetrieveDataMagazinesFromApiAsync()
         {
             var fileDirectories = await api.GetFileNamesAsync();
-            foreach (var fileDirectory in fileDirectories)
+            foreach (var fileDirective in fileDirectories)
             {
-                var file = await api.GetFileAsync(fileDirectory.Directory);
-                await SaveFileSync(file, fileDirectory.Directory);
+                var file = await TryGetFileFromApiAsync(fileDirective);
+                var result = await TrySaveFileAsync(fileDirective, file);
             }
+        }
+
+        private async Task<bool> TrySaveFileAsync(FileDirective fileDirective, byte[] file)
+        {
+            try
+            {
+                await SaveFileSync(file, fileDirective.BlobPath);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Could not save file. {ex.Message}");
+            }
+
+            return false;
+        }
+
+        private async Task<byte[]> TryGetFileFromApiAsync(FileDirective fileDirective)
+        {
+            try
+            {
+                var file = await api.GetFileAsync(fileDirective.DirectoryWithName, fileDirective.ExtensionNoDot);
+                return file;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Could not retrieve file. {ex.Message}");
+            }
+
+            return new byte[0];
         }
 
         private async void DeleteAllAsync()

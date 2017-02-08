@@ -8,10 +8,10 @@ using TressMontage.Client.Core.Http.Clients;
 using TressMontage.Entities;
 using TressMontage.Utilities;
 
-namespace TressMontage.Client.Core.Tests
+namespace TressMontage.Client.Core.Tests.Http.Clients
 {
     [TestClass]
-    public class UnitTest1
+    public class TressMontageApiTests
     {
         [TestMethod]
         public async Task RetriveBlobNames()
@@ -44,7 +44,7 @@ namespace TressMontage.Client.Core.Tests
             var fileNames = await api.GetFileNamesAsync();
             var fileName = fileNames.FirstOrDefault();
 
-            var file = await api.GetFileAsync(fileName.Directory);
+            var file = await api.GetFileAsync(fileName.DirectoryWithName, fileName.ExtensionNoDot);
 
             var testFilePath = @"C:\temp\test.txt";
             File.WriteAllBytes(testFilePath, file);
@@ -59,7 +59,9 @@ namespace TressMontage.Client.Core.Tests
             var api = new TressMontageApi(httpFactory);
 
             var fileNames = await api.GetFileNamesAsync();
-            var file = await api.GetFileAsync(fileNames.FirstOrDefault(x => x.Extension == ".pdf").Directory);
+            var firstPDF = fileNames.FirstOrDefault(x => x.Extension.Contains(".pdf"));
+
+            var file = await api.GetFileAsync(firstPDF.DirectoryWithName, firstPDF.ExtensionNoDot);
 
             var testFilePath = @"C:\temp\test.pdf";
             File.WriteAllBytes(testFilePath, file);

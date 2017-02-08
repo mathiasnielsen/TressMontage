@@ -68,6 +68,7 @@
     <Compile Include="Services\IStorageService.cs" />
     <Compile Include="Features\DataMagazine\DisplayPDFViewModel.cs" />
     <Compile Include="Utilitites\AsyncLock.cs" />
+    <Compile Include="Utilitites\FileInfoMapper.cs" />
     <Compile Include="Utilitites\LoadingManager.cs" />
     <Compile Include="Utilitites\ILoadingManager.cs" />
     <Compile Include="Utilitites\LoadingScope.cs" />
