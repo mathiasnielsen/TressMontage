@@ -45,9 +45,9 @@
 										HorizontalTextAlignment="Center"
 	                                    Text="{Binding ExtensionNoDot}"/>
 									<Image 
-										Grid.Column="1"
+										Grid.Column="2"
 										HeightRequest="20"
-										Source="icon_folder.png" />
+										Source="{Binding Type, Converter={StaticResource fileTypeIconConverter}}" />
 	                            </Grid>
 	                        </ViewCell>
 	                    </DataTemplate>
