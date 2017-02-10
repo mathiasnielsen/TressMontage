@@ -23,7 +23,7 @@
             <Color
                 x:Key="SecondaryBrandColor">#FFFFc0cb</Color>
             <Color
-                x:Key="ContentBackgroundColor">#FF00A654</Color>
+                x:Key="ContentBackgroundColor">#FF2FBB3D</Color>
             <Color
                 x:Key="DarkTextColor">#FF000000</Color>
             <!-- Font sizes -->
