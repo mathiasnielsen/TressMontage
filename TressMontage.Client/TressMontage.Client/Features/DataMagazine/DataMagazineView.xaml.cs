@@ -30,7 +30,7 @@ namespace TressMontage.Client.Features.DataMagazine
                 new ParameterOverride("loadingManager", LoadingManager));
         }
 
-        private async void DeleteMagazines()
+        private void DeleteMagazines()
         {
             ViewModel.TryDeleteAsyncCommand.Execute(null);
         }

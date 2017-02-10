@@ -17,7 +17,7 @@
 			<Color
 				x:Key="Grey">#FFC6CAC5</Color>
             <Color
-                x:Key="BrandColor">#FF00A654</Color>
+                x:Key="BrandColor">#FF2FBB3D</Color>
             <Color
                 x:Key="DebugColor">#FF00FF00</Color>
             <Color
