@@ -26,20 +26,13 @@ namespace TressMontage.Client.Features.DataMagazine
 
         protected override DataMagazineViewModel OnPrepareViewModel()
         {
-            return App.Container.Resolve<DataMagazineViewModel>(new ParameterOverride("loadingManager", LoadingManager));
+            return App.Container.Resolve<DataMagazineViewModel>(
+                new ParameterOverride("loadingManager", LoadingManager));
         }
 
         private async void DeleteMagazines()
         {
-            var result = await DisplayActionSheet(
-                DeleteActionSheetHeader,
-                DeleteActionSheetCancel,
-                DeleteActionSheetDelete);
-
-            if (result == DeleteActionSheetDelete)
-            {
-                ViewModel.DeleteAllCommand.Execute(null);
-            }
+            ViewModel.TryDeleteAsyncCommand.Execute(null);
         }
     }
 }

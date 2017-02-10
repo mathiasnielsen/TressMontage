@@ -74,6 +74,7 @@ namespace TressMontage.Client
             _container.RegisterSingleton<IHttpClientFactory, HttpClientFactory>();
             _container.RegisterSingleton<ITressMontageApi, TressMontageApi>();
             _container.RegisterSingleton<ILoadingManager, LoadingManager>();
+            _container.RegisterSingleton<IDialogService, DialogService>();
         }
     }
 }

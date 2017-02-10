@@ -17,6 +17,9 @@ namespace TressMontage.Client.Converters
                 { 
                     case DirectiveTypes.Folder:
                         return "icon_folder.png";
+
+                    case DirectiveTypes.File:
+                        return "icon_file.png";
                 }
 
                 return string.Empty;

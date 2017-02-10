@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using TressMontage.Client.Core;
 using TressMontage.Client.Core.Common;
 using TressMontage.Client.Core.Extensions;
 using TressMontage.Client.Core.Features.Base;
@@ -26,30 +27,37 @@ namespace TressMontage.Client.Features.DataMagazine
         private readonly ITressMontageApi api;
         private readonly FileInfoMapper fileMapper;
         private readonly ILoadingManager loadingManager;
+        private readonly IDialogService dialogService;
 
         private List<FileDirective> fileInfos;
         private string title;
         private string subDirectory;
 
-        public DataMagazineViewModel(ITressMontageApi api, INavigationService navigationService, IFileInfoManager fileInfoManager, ILoadingManager loadingManager)
+        public DataMagazineViewModel(
+            ITressMontageApi api,
+            INavigationService navigationService,
+            IFileInfoManager fileInfoManager,
+            ILoadingManager loadingManager,
+            IDialogService dialogService)
         {
             this.navigationService = navigationService.ThrowIfParameterIsNull(nameof(navigationService));
             this.fileInfoManager = fileInfoManager.ThrowIfParameterIsNull(nameof(fileInfoManager));
             this.api = api.ThrowIfParameterIsNull(nameof(api));
             this.loadingManager = loadingManager.ThrowIfParameterIsNull(nameof(loadingManager));
+            this.dialogService = dialogService.ThrowIfParameterIsNull(nameof(dialogService));
 
             fileMapper = new FileInfoMapper();
 
             FileInfoSelectedCommand = new RelayCommand<FileDirective>(HandleSelectedDirective);
             UpdateCommand = new RelayCommand(UpdateAsync);
-            DeleteAllCommand = new RelayCommand(DeleteAllAsync);
+            TryDeleteAsyncCommand = new RelayCommand(TryDeleteAllAsync);
         }
 
         public RelayCommand<FileDirective> FileInfoSelectedCommand { get; }
 
         public RelayCommand UpdateCommand { get; }
 
-        public RelayCommand DeleteAllCommand { get; }
+        public RelayCommand TryDeleteAsyncCommand { get; }
 
         public List<FileDirective> FileInfos
         {
@@ -79,7 +87,7 @@ namespace TressMontage.Client.Features.DataMagazine
                 {
                     Title = "Data Magazines";
                     await GetDataFromRootFolderAsync();
-                }   
+                }
             }
         }
 
@@ -95,7 +103,7 @@ namespace TressMontage.Client.Features.DataMagazine
                 else
                 {
                     await GetDataFromRootFolderAsync();
-                }   
+                }
             }
         }
 
@@ -144,7 +152,7 @@ namespace TressMontage.Client.Features.DataMagazine
 
         private void HandleSelectedFileType(FileDirective file)
         {
-            switch(file.Extension)
+            switch (file.Extension)
             {
                 case ".pdf":
                     navigationService.NavigateToDisplayPDF(file.BlobPath);
@@ -201,10 +209,19 @@ namespace TressMontage.Client.Features.DataMagazine
             return new byte[0];
         }
 
-        private async void DeleteAllAsync()
+        private async void TryDeleteAllAsync()
         {
+            var shouldDelete = await dialogService.DisplayAlertAsync("Delete", "Are you sure?");
+            if (shouldDelete)
+            {
+                await DeleteAllAsync();
+            }
+        }
+
+        private async Task DeleteAllAsync()
+        { 
             using (loadingManager.CreateLoadingScope())
-            { 
+            {
                 var hasDeleted = await fileInfoManager.DeleteMagazineFolderAsync(RootFolderName);
                 if (hasDeleted)
                 {
