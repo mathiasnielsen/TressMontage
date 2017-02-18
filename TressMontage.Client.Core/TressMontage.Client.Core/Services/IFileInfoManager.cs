@@ -18,6 +18,8 @@ namespace TressMontage.Client.Core.Services
 
         Task<IList<IFile>> GetFilesDirectoriesInFolderAsync(string relativeFolderPath);
 
+        Task<IList<IFile>> GetFileDirectoriesInRootFolderAsync(string rootFolderName);
+
         Task<bool> DeleteMagazineFolderAsync(string featureDirectoryName);
 
         Task SaveFileAsync(byte[] file, string featureDirectoryName, string relativeFilePath);

@@ -29,6 +29,8 @@ namespace TressMontage.Client.Features.Base
                 stackLayout.HorizontalOptions = LayoutOptions.CenterAndExpand;
 
                 var activitySpinner = new ActivityIndicator();
+                activitySpinner.WidthRequest = 100;
+                activitySpinner.HeightRequest = 100;
                 activitySpinner.Color = Color.White;
                 activitySpinner.IsVisible = true;
                 activitySpinner.IsRunning = true;

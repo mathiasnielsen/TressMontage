@@ -58,6 +58,7 @@
     <Compile Include="Http\HttpRequestExecutor.cs" />
     <Compile Include="Http\IHttpClientFactory.cs" />
     <Compile Include="Http\IHttpRequestExecutor.cs" />
+    <Compile Include="Http\Mappers\FileDirectiveMapper.cs" />
     <Compile Include="IOC\IInitializable.cs" />
     <Compile Include="IOC\InitializableStrategy.cs" />
     <Compile Include="IOC\InitializationExtension.cs" />
