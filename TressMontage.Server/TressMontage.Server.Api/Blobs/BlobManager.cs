@@ -130,5 +130,19 @@ namespace TressMontage.Server.Api.Blobs
 
             return fileInfoDto;
         }
+
+        public async Task DeleteBlobStorageAsync()
+        {
+            // Retrieve storage account from connection string.
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(ConnectionString);
+
+            // Create the blob client.
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+            // Retrieve reference to a previously created container.
+            CloudBlobContainer container = blobClient.GetContainerReference(ContainerName);
+
+            await container.DeleteAsync();
+        }
     }
 }
