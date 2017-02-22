@@ -110,7 +110,7 @@ namespace TressMontage.Client.Features.DataMagazine
         private async Task GetDataFromRootFolderAsync()
         {
             var rootFolders = await fileInfoManager.GetFoldersFromRootFoldersAsync(RootFolderName);
-            var rootFiles = await fileInfoManager.GetFilesDirectoriesInFolderAsync(RootFolderName);
+            var rootFiles = await fileInfoManager.GetFileDirectoriesInRootFolderAsync(RootFolderName);
 
             var folders = fileMapper.MapFolderToFileInfo(rootFolders);
             var files = fileMapper.MapFilesToFileInfo(rootFiles);
@@ -127,8 +127,15 @@ namespace TressMontage.Client.Features.DataMagazine
             var folders = fileMapper.MapFolderToFileInfo(rootFolders);
             var files = fileMapper.MapFilesToFileInfo(rootFiles);
 
-            var filesAndFoldersAsFileInfos = folders.Concat(files);
-            FileInfos = filesAndFoldersAsFileInfos.ToList();
+            if (folders == null)
+            {
+                FileInfos = files;
+            }
+            else
+            {
+                var filesAndFoldersAsFileInfos = folders.Concat(files);
+                FileInfos = filesAndFoldersAsFileInfos?.ToList();
+            }
         }
 
         private async Task SaveFileSync(byte[] file, string path)

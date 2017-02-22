@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using PCLStorage;
 using TressMontage.Client.Core.Services;
+using TressMontage.Utilities.Extensions;
 
 namespace TressMontage.Client.Services
 {
@@ -56,9 +58,17 @@ namespace TressMontage.Client.Services
             return default(IList<IFolder>);
         }
 
+        public async Task<IList<IFile>> GetFileDirectoriesInRootFolderAsync(string rootFolderName)
+        {
+            var folder = await rootFolder.GetFolderAsync(rootFolderName);
+            var files = await folder.GetFilesAsync();
+
+            return files;
+        }
+
         public async Task<IList<IFile>> GetFilesDirectoriesInFolderAsync(string relativeFolderPath)
         {
-            var folder = await rootFolder.GetFolderAsync(relativeFolderPath);
+            var folder = await FileSystem.Current.GetFolderFromPathAsync(relativeFolderPath);
             var files = await folder.GetFilesAsync();
 
             return files;
@@ -108,7 +118,13 @@ namespace TressMontage.Client.Services
             {
                 if (IsPathRooted(relativeFilePath))
                 {
-                    var folder = await FileSystem.Current.LocalStorage.CreateFolderAsync(featureDirectoryName, CreationCollisionOption.OpenIfExists);
+                    var featuredDirectory = Path.Combine(featureDirectoryName, relativeFilePath);
+                    var folder = await TryGetFolderAsync(featuredDirectory);
+
+                    ////var classicDirectory = GetDirectoryAsClassPath(relativeFilePath);
+                    ////var combinedDirectory = classicDirectory.GetPlatformSpecificPath();
+
+                    ////var folder = await FileSystem.Current.LocalStorage.CreateFolderAsync(combinedDirectory, CreationCollisionOption.OpenIfExists);
                     await SaveFileToValidPath(file, folder, fileName);
                 }
                 else
@@ -116,6 +132,20 @@ namespace TressMontage.Client.Services
                     var folder = await rootFolder.CreateFolderAsync(directory, CreationCollisionOption.ReplaceExisting);
                     await SaveFileToValidPath(file, folder, fileName);
                 }
+            }
+        }
+
+        private async Task<IFolder> TryGetFolderAsync(string directory)
+        {
+            try
+            {
+                var classicPath = GetDirectoryAsClassPath(directory);
+                var folder = await rootFolder.CreateFolderAsync(classicPath, CreationCollisionOption.ReplaceExisting);
+                return folder;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception();
             }
         }
 
@@ -130,8 +160,26 @@ namespace TressMontage.Client.Services
 
         private bool IsPathRooted(string filePath)
         {
-            var directoryName = Path.GetDirectoryName(filePath);
-            return string.IsNullOrEmpty(directoryName);
+            var classicPath = ConvertToClassicPath(filePath);
+            var directoryName = Path.GetDirectoryName(classicPath);
+
+            return string.IsNullOrEmpty(directoryName) == false;
+        }
+
+        private string ConvertToClassicPath(string path)
+        {
+            var splittedPath = path.Split('\\');
+            var classicPath = string.Join("/", splittedPath);
+
+            return classicPath;
+        }
+
+        private string GetDirectoryAsClassPath(string path)
+        {
+            var classicPath = ConvertToClassicPath(path);
+            var classicDirectory = Path.GetDirectoryName(classicPath);
+
+            return classicDirectory;
         }
     }
 }

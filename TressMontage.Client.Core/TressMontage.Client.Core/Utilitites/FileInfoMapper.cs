@@ -13,7 +13,7 @@ namespace TressMontage.Client.Core.Utilitites
     {
         public List<FileDirective> MapFolderToFileInfo(IList<IFolder> folders)
         {
-            var fileInfos = folders.Select(x => new FileDirective() { BlobPath = x.Path, Type = DirectiveTypes.Folder });
+            var fileInfos = folders?.Select(x => new FileDirective() { BlobPath = x.Path, Type = DirectiveTypes.Folder });
             return fileInfos?.ToList() ?? new List<FileDirective>();
         }
 

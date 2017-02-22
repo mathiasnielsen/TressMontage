@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -26,7 +27,7 @@ namespace TressMontage.Server.Api.Controllers
                 blobsAsFileInfoDTO.Add(fileInfoDto);
             }
 
-            var response = CreateResponse(blobsAsFileInfoDTO);
+            var response = CreateResponseWithData(blobsAsFileInfoDTO);
 
             return response;
         }
@@ -38,7 +39,7 @@ namespace TressMontage.Server.Api.Controllers
             var blobManager = new BlobManager();
 
             var result = await blobManager.GetBlobAsync(blobPath + "." + extension);
-            var response = CreateResponse(result);
+            var response = CreateResponseWithData(result);
 
             return response;
         }
@@ -50,17 +51,45 @@ namespace TressMontage.Server.Api.Controllers
             var blobManager = new BlobManager();
 
             var result = await blobManager.UploadBlobIntoContainer(fileDto);
-            var response = CreateResponse(result);
+            var response = CreateResponseWithData(result);
 
             return response;
         }
 
-        private HttpResponseMessage CreateResponse<TData>(TData data)
+        [Route("datamagazines/{code}")]
+        [HttpDelete]
+        public async Task<HttpResponseMessage> DeleteDataMagazinesAsync(string code)
+        {
+            var blobManager = new BlobManager();
+
+            if (code == "1234")
+            {
+                await blobManager.DeleteBlobStorageAsync();
+
+                return CreateSuccesfullResponse();
+            }
+
+            return CreateNotAcceptedResponse();
+        }
+
+        private HttpResponseMessage CreateResponseWithData<TData>(TData data)
         {
             var response = new HttpResponseMessage();
 
             var serializedData = JsonConvert.SerializeObject(data);
             response.Content = new StringContent(serializedData);
+
+            return response;
+        }
+
+        private HttpResponseMessage CreateSuccesfullResponse()
+        {
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        private HttpResponseMessage CreateNotAcceptedResponse()
+        {
+            var response = new HttpResponseMessage(HttpStatusCode.NotAcceptable);
 
             return response;
         }
