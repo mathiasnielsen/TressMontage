@@ -15,6 +15,9 @@
             <Button
                 Text="Data Magazines"
                 Command="{Binding NavigateToDataMagazineCommand}"/>
+            <Button
+                Text="Calendar"
+                Command="{Binding NavigateToCalendarCommand}"/>
         </StackLayout>
     </Grid>
 </local:HomeViewBase>

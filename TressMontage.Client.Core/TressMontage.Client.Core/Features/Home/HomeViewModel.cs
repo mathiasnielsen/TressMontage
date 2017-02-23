@@ -19,11 +19,14 @@ namespace TressMontage.Client.Core.Features.Home
 
             NavigateToMapCommand = new RelayCommand(NavigateToMap);
             NavigateToDataMagazineCommand = new RelayCommand(NavigateToDataMagazine);
+            NavigateToCalendarCommand = new RelayCommand(NavigateToCalendar);
         }
 
         public RelayCommand NavigateToDataMagazineCommand { get; }
 
         public RelayCommand NavigateToMapCommand { get; }
+
+        public RelayCommand NavigateToCalendarCommand { get; }
 
         private void NavigateToDataMagazine()
         {
@@ -33,6 +36,11 @@ namespace TressMontage.Client.Core.Features.Home
         private void NavigateToMap()
         {
             navigationService.NavigateToMap();
+        }
+
+        private void NavigateToCalendar()
+        {
+            navigationService.NavigateToCalendar();
         }
     }
 }

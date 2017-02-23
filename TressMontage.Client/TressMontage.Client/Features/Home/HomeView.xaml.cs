@@ -1,6 +1,4 @@
-﻿using Microsoft.Practices.Unity;
-using TressMontage.Client.Core.Features.Base;
-using TressMontage.Client.Core.Features.Home;
+﻿using TressMontage.Client.Core.Features.Home;
 using TressMontage.Client.Features.Base;
 
 namespace TressMontage.Client.Features.Home

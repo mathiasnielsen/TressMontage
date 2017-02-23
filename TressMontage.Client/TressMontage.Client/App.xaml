@@ -18,14 +18,19 @@
 				x:Key="Grey">#FFC6CAC5</Color>
             <Color
                 x:Key="BrandColor">#FF2FBB3D</Color>
-            <Color
-                x:Key="DebugColor">#FF00FF00</Color>
-            <Color
-                x:Key="SecondaryBrandColor">#FFFFc0cb</Color>
-            <Color
-                x:Key="ContentBackgroundColor">#FF2FBB3D</Color>
+			<Color
+				x:Key="DarkAdjacentBrandColor">#FF268A93</Color>
+			<Color
+				x:Key="LightAdjacentBrandColor">#FFA4E038</Color>
+			<Color
+				x:Key="ComplimentaryBrandColor">#FFF1463D</Color>
             <Color
                 x:Key="DarkTextColor">#FF000000</Color>
+			<Color 
+				x:Key="ContentBackgroundColor">#FF2FBB3D</Color>
+            <Color
+                x:Key="DebugColor">#FF00FF00</Color>
+			
             <!-- Font sizes -->
             <x:Double
                 x:Key="FontSizeBig">30</x:Double>

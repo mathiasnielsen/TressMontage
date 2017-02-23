@@ -14,6 +14,8 @@ namespace TressMontage.Client.Core.Services
 
         void NavigateToMap();
 
+        void NavigateToCalendar();
+
         void NavigateToDataMagazine(string directory = null);
 
         void NavigateToDisplayPDF(string pdfDirectory);

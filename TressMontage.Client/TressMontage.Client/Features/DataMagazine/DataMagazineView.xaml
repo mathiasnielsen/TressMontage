@@ -6,7 +6,7 @@
              x:Class="TressMontage.Client.Features.DataMagazine.DataMagazineView"
 			 Title="{Binding Title}">
 		<RelativeLayout
-			BackgroundColor="{StaticResource Grey}">
+			BackgroundColor="{StaticResource White}">
 		<Grid>
 	        <StackLayout
 	            Orientation="Vertical"

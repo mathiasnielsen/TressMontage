@@ -9,7 +9,7 @@ namespace TressMontage.Client.Features.Base
 {
     public abstract class ViewBase : ContentPage
     {
-        private StackLayout loadingContainer; 
+        private StackLayout loadingContainer;
 
         public ViewBase()
         {
