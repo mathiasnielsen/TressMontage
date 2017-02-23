@@ -3,12 +3,10 @@ using Xamarin.Forms;
 
 namespace TressMontage.Client.Controls.Factories
 {
-    public class LoadingViewFactory
+    public class LoadingView : StackLayout
     {
-        private StackLayout loadingContainer;
-
-        public StackLayout ConstructView(View parentContainer)
-        { 
+        public LoadingView(View parentContainer)
+        {
             var stackLayout = new StackLayout();
             stackLayout.Padding = new Thickness(20, 20, 20, 40);
             stackLayout.VerticalOptions = LayoutOptions.CenterAndExpand;
@@ -21,14 +19,22 @@ namespace TressMontage.Client.Controls.Factories
             activitySpinner.IsVisible = true;
             activitySpinner.IsRunning = true;
 
+            ProgressLabel = new Label();
+            ProgressLabel.WidthRequest = 100;
+            ProgressLabel.HeightRequest = 100;
+            ProgressLabel.HorizontalOptions = LayoutOptions.Center;
+            ProgressLabel.HorizontalTextAlignment = TextAlignment.Center;
+            ProgressLabel.FontSize = 13;
+            ResetProgressLabel();
+
             stackLayout.Children.Add(activitySpinner);
+            stackLayout.Children.Add(ProgressLabel);
 
-            loadingContainer = new StackLayout();
-            loadingContainer.VerticalOptions = LayoutOptions.FillAndExpand;
-            loadingContainer.HorizontalOptions = LayoutOptions.FillAndExpand;
-            loadingContainer.BackgroundColor = new Color(0, 0, 0, 0.4f);
+            VerticalOptions = LayoutOptions.FillAndExpand;
+            HorizontalOptions = LayoutOptions.FillAndExpand;
+            BackgroundColor = new Color(0, 0, 0, 0.4f);
 
-            loadingContainer.Children.Add(stackLayout);
+            Children.Add(stackLayout);
 
             var centerX = Constraint.RelativeToParent(parent => 0);
             var centerY = Constraint.RelativeToParent(parent => 0);
@@ -36,11 +42,17 @@ namespace TressMontage.Client.Controls.Factories
             var height = Constraint.RelativeToParent(parent => parent.Height);
 
             var contentAsRelativeLayout = parentContainer as RelativeLayout;
-            contentAsRelativeLayout.Children.Add(loadingContainer, centerX, centerY, width, height);
+            contentAsRelativeLayout.Children.Add(this, centerX, centerY, width, height);
 
-            loadingContainer.IsVisible = false;
+            this.IsVisible = false;
+        }
 
-            return loadingContainer;
+        public Label ProgressLabel { get; private set; }
+
+        public void ResetProgressLabel()
+        { 
+            ProgressLabel.IsVisible = false;
+            ProgressLabel.Text = "0";
         }
     }
 }

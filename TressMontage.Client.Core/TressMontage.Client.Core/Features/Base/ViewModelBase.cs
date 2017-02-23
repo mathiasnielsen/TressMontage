@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TressMontage.Client.Core.Features.Base
 {
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
         private bool isLoading;
+        private float loadingProgress;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -18,6 +15,17 @@ namespace TressMontage.Client.Core.Features.Base
         {
             get { return isLoading; }
             set { Set(ref isLoading, value); }
+        }
+
+        public float LoadingProgress
+        {
+            get { return loadingProgress; }
+            set { Set(ref loadingProgress, value); }
+        }
+
+        protected void ResetLoadingProgress()
+        {
+            LoadingProgress = 0;
         }
 
         protected bool Set<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)

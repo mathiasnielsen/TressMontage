@@ -2,6 +2,7 @@
 using TressMontage.Client.Core.Features.Base;
 using TressMontage.Client.Services;
 using Microsoft.Practices.Unity;
+using Xamarin.Forms;
 
 namespace TressMontage.Client.Features.Base
 {
@@ -21,12 +22,23 @@ namespace TressMontage.Client.Features.Base
                 ViewModel = OnPrepareViewModel();
                 BindingContext = ViewModel;
 
+                InitializeViewBaseBindings();
                 ViewModel.ViewInitialized(this.GetNavigationArgs());
                 hasAppeared = true;
             }
             else
             {
                 ViewModel.ViewReloading();
+            }
+        }
+
+        private void InitializeViewBaseBindings()
+        {
+            if (LoadingView != null)
+            {
+                var converter = new ProgressToPercentageTextConverter();
+                LoadingView.ProgressLabel.SetBinding(Label.TextProperty, "LoadingProgress", converter: converter);
+                LoadingView.ProgressLabel.BindingContext = BindingContext;
             }
         }
 

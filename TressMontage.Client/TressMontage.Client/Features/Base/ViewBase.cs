@@ -7,15 +7,13 @@ namespace TressMontage.Client.Features.Base
 {
     public abstract class ViewBase : ContentPage
     {
-        private LoadingViewFactory loadingViewFactory;
-        private StackLayout loadingContainer;
-
         public ViewBase()
         {
             BackgroundColor = (Color)Application.Current.Resources["ContentBackgroundColor"];
             LoadingManager = CreateLoadingManager();
-            loadingViewFactory = new LoadingViewFactory();
         }
+
+        protected LoadingView LoadingView { get; private set; }
 
         protected override void OnAppearing()
         {
@@ -23,7 +21,7 @@ namespace TressMontage.Client.Features.Base
 
             if (IsContentRelativeLayout())
             {
-                loadingContainer = loadingViewFactory.ConstructView(Content);
+                LoadingView = new LoadingView(Content);
             }
         }
 
@@ -58,12 +56,13 @@ namespace TressMontage.Client.Features.Base
 
         private void LoadingManager_Loading(object sender, EventArgs e)
         {
-            loadingContainer.IsVisible = true;
+            LoadingView.ProgressLabel.IsVisible = LoadingManager.UseProgress;
+            LoadingView.IsVisible = true;
         }
 
         private void LoadingManager_Completed(object sender, EventArgs e)
         {
-            loadingContainer.IsVisible = false;
+            LoadingView.IsVisible = false;
         }
     }
 }

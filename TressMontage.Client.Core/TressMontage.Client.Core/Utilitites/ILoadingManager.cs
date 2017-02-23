@@ -21,6 +21,8 @@ namespace TressMontage.Client.Core.Utilities
         /// </summary>
         bool IsLoadingCompleted { get; }
 
+        bool UseProgress { get; }
+
         /// <summary>
         /// Begins loading, raising the <see cref="Loading"/> event.
         /// </summary>
@@ -36,6 +38,6 @@ namespace TressMontage.Client.Core.Utilities
         /// calls "BeginLoad" when is constructed, and "EndLoad" when it is disposed. 
         /// This is a convenience method to allow control of the loading cycle through a using block.
         /// </summary>
-        LoadingScope CreateLoadingScope();
+        LoadingScope CreateLoadingScope(bool useProgress = false, Action completion = null);
     }
 }

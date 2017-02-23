@@ -169,7 +169,7 @@ namespace TressMontage.Client.Features.DataMagazine
 
         private async void UpdateAsync()
         {
-            using (loadingManager.CreateLoadingScope())
+            using (loadingManager.CreateLoadingScope(useProgress: true, completion: ResetLoadingProgress))
             {
                 await RetrieveDataMagazinesFromApiAsync();
                 await GetDataFromRootFolderAsync();
@@ -179,10 +179,14 @@ namespace TressMontage.Client.Features.DataMagazine
         private async Task RetrieveDataMagazinesFromApiAsync()
         {
             var fileDirectories = await api.GetFileNamesAsync();
+            var count = 0;
             foreach (var fileDirective in fileDirectories)
             {
+                LoadingProgress = (float)count / (float)fileDirectories.Count;
+                count++;
+
                 var file = await TryGetFileFromApiAsync(fileDirective);
-                var result = await TrySaveFileAsync(fileDirective, file);
+                await TrySaveFileAsync(fileDirective, file);
             }
         }
 

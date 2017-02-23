@@ -5,19 +5,22 @@ namespace TressMontage.Client.Core.Utilities
 {
     public class LoadingScope : IDisposable
     {
-        private readonly ILoadingManager _loadingManager;
+        private readonly ILoadingManager loadingManager;
+        private readonly Action completion;
 
-        public LoadingScope(ILoadingManager loadingManager)
+        public LoadingScope(ILoadingManager loadingManager, Action completion)
         {
             loadingManager.ThrowIfParameterIsNull(nameof(loadingManager));
 
-            _loadingManager = loadingManager;
-            _loadingManager.BeginLoad();
+            this.loadingManager = loadingManager;
+            this.loadingManager.BeginLoad();
+            this.completion = completion;
         }
 
         public void Dispose()
         {
-            _loadingManager.EndLoad();
+            completion?.Invoke();
+            this.loadingManager.EndLoad();
         }
     }
 }

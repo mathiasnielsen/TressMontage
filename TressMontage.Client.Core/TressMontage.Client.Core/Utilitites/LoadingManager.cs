@@ -22,6 +22,8 @@ public class LoadingManager : ILoadingManager
 
         public bool IsLoadingCompleted { get; private set; }
 
+        public bool UseProgress { get; private set; }
+
         /// <summary>
         /// Invokes loading.
         /// </summary>
@@ -45,9 +47,10 @@ public class LoadingManager : ILoadingManager
         /// calls "BeginLoad" when it is constrcuted, and "EndLoad"
         /// when it is disposed. 
         /// </summary>
-        public LoadingScope CreateLoadingScope()
+        public LoadingScope CreateLoadingScope(bool useProgress = false, Action completion = null)
         {
-            return new LoadingScope(this);
+            UseProgress = useProgress;
+            return new LoadingScope(this, completion);
         }
 
         private void OnLoading()
