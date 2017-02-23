@@ -1,9 +1,6 @@
 ﻿using System;
 using TressMontage.Client.Core.Utilities;
 using Xamarin.Forms;
-using TressMontage.Client.Controls;
-using TressMontage.Client.Features.Common;
-using Rg.Plugins.Popup.Extensions;
 
 namespace TressMontage.Client.Features.Base
 {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Practices.Unity;
+using TressMontage.Client.Core;
 using TressMontage.Client.Core.Http;
 using TressMontage.Client.Core.Http.Clients;
 using TressMontage.Client.Core.Services;
@@ -75,6 +76,7 @@ namespace TressMontage.Client
             _container.RegisterSingleton<ITressMontageApi, TressMontageApi>();
             _container.RegisterSingleton<ILoadingManager, LoadingManager>();
             _container.RegisterSingleton<IDialogService, DialogService>();
+            _container.RegisterSingleton<IDeviceService, DeviceService>();
         }
     }
 }
