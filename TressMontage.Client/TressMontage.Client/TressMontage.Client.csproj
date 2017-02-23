@@ -74,6 +74,7 @@
       <DependentUpon>CalendarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\DeviceService.cs" />
+    <Compile Include="Controls\Factories\LoadingViewFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -191,6 +192,7 @@
   <ItemGroup>
     <Folder Include="Converters\" />
     <Folder Include="Features\Calendar\" />
+    <Folder Include="Controls\Factories\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
