@@ -111,6 +111,8 @@ namespace TressMontage.Client.Services
             if (directoryResult != null)
             {
                 // Save file in existing directory.
+                var folder2 = FileSystem.Current.LocalStorage.Name;
+
                 var folder = await FileSystem.Current.GetFolderFromPathAsync(directory);
                 await SaveFileToValidPath(file, folder, fileName);
             }

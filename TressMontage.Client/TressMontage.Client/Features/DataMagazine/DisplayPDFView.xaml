@@ -9,5 +9,9 @@
 			Uri="{Binding PDFDirectory}" 
 			HorizontalOptions="FillAndExpand" 
 			VerticalOptions="FillAndExpand" />
+        <Label
+            HorizontalTextAlignment="Center"
+            VerticalTextAlignment="Center"
+            Text="Welcome back!"/>
 	</Grid>
 </local:DisplayPDFViewBase>
